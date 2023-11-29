@@ -2,6 +2,7 @@ import pygame
 from sys import exit
 
 # for running python3 TheCode/arithimon.py
+# assuming the directory is the same
 
 class gameTitle(pygame.sprite.Sprite):
     def __init__(self):

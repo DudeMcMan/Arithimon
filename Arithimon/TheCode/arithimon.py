@@ -1,6 +1,8 @@
 import pygame
 from sys import exit
 
+# for running python3 TheCode/arithimon.py
+
 class gameTitle(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
@@ -52,11 +54,14 @@ def main():
     clock = pygame.time.Clock() #needed for frame rate
    
     jeremy = 0
+    michael = 200
    
     userText = "Input Here"
  
     # text rect
     inputRect = pygame.Rect(200, 200, 140, 32)
+    healthRect = pygame.Rect(1000, 500, michael, 25)
+    damageRect = pygame.Rect(1000, 500, 200, 25)
    
     # color_active stores color(lightskyblue3) which
     # gets active when input box is clicked by user
@@ -80,14 +85,14 @@ def main():
     secretMessage = theFont.render("Sick", False, "white") #for fun
     secretMessageRect = secretMessage.get_rect(center=(675, 400))
    
-    answerMessage = theFont.render("Click To Answer", False, "white") #temperary answer button
+    answerMessage = theFont.render("Click To Answer (Or Press Enter)", False, "white") #temperary answer button
     answerMessageRect = answerMessage.get_rect(center=(675, 600))
    
     wrongMessage = theFont.render("Incorrect", False, "white") #temperary answer button
     wrongMessageRect = wrongMessage.get_rect(center=(675, 400))
    
    
-    tempMessage = theFont.render("Select Your Difficulty", False, "black") #temperary start game message
+    tempMessage = theFont.render("Select Your Difficulty (only easy works)", False, "black") #temperary start game message
     tempMessageRect = tempMessage.get_rect(center=(675, 150))
    
     tempMessageDiffTwo = theFont.render("(1)Easy", False, "black") #temperary difficulty option
@@ -135,21 +140,30 @@ def main():
                
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if answerMessageRect.collidepoint(event.pos):
-                    answered = True
+                    if textActive:
+                        answered = True
                
                 if inputRect.collidepoint(event.pos):
                     textActive = True
+                    userText = ""
                 else:
                     textActive = False
            
             if textActive:
                 if event.type == pygame.KEYDOWN:
+                    
+                    if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN or event.type == pygame.KEYDOWN and event.key == pygame.K_KP_ENTER:
+                        if textActive:
+                            answered = True
  
                     # Check for backspace
                     if event.key == pygame.K_BACKSPACE:
  
                         # get text input from 0 to -1 i.e. end.
                         userText = userText[:-1]
+                        
+                    elif event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
+                        pass
  
                     # Unicode standard is used for string
                     # formation
@@ -203,6 +217,9 @@ def main():
      
                 # render at position stated in arguments
                 screen.blit(text_surface, (inputRect.x+5, inputRect.y+5))
+                
+                pygame.draw.rect(screen, "red", damageRect)
+                pygame.draw.rect(screen, "green", healthRect)
      
                 # set width of textfield so that text cannot get
                 # outside of user's text input
@@ -210,7 +227,8 @@ def main():
                
                 if answered:
                     if userText == "4":
-                        screen.blit(secretMessage, secretMessageRect)
+                        healthRect.update(1000, 500, michael - 20, 25)
+
                     else:
                         screen.blit(wrongMessage, wrongMessageRect)
                

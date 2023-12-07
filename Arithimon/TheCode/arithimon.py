@@ -1,5 +1,6 @@
 import pygame
 from sys import exit
+from random import randint
 
 # for running python3 TheCode/arithimon.py
 # assuming the directory is the same
@@ -54,15 +55,30 @@ def main():
    
     clock = pygame.time.Clock() #needed for frame rate
    
-    jeremy = 0
-    michael = 200
+    jeremy = 0 # this is for the start up screen, so it can changeS
+    michael = 200 # to make te health bar go down
+    battleTimer = 0 #deducts from base
+    alvin = 0 #damage deduction
+    simon = 200 #to make health bar go down 
+    theodre = 200 #damage deduction base
+    ash = 0 #time stayed on enemy turn
+    kat = False #to help change screen
+    beavis = 0
+    butthead = False
+    correct = False #tells if answer is correct
+    carl = 0
+    weezer = 0
+    win = False
+    done = False
    
     userText = "Input Here"
  
     # text rect
     inputRect = pygame.Rect(200, 200, 140, 32)
-    healthRect = pygame.Rect(1000, 500, michael, 25)
-    damageRect = pygame.Rect(1000, 500, 200, 25)
+    playerHealthRect = pygame.Rect(100, 500, michael, 25)
+    playerDamageRect = pygame.Rect(100, 500, 200, 25)
+    otherHealthRect = pygame.Rect(1000, 175, michael, 25)
+    otherDamageRect = pygame.Rect(1000, 175, 200, 25)
    
     # color_active stores color(lightskyblue3) which
     # gets active when input box is clicked by user
@@ -101,6 +117,15 @@ def main():
    
     tempMessageEasy = theFont.render("What's 2 + 2?", False, "white") #temperary message
     tempMessageRectEasy = tempMessageEasy.get_rect(center=(675, 150))
+    
+    tempMessageTurn = theFont.render("Enemy Turn", False, "white") #temperary message
+    tempMessageRectTurn = tempMessageTurn.get_rect(center=(675, 150))
+    
+    tempMessageWin = theFont.render("You Win", False, "white") #temperary message
+    tempMessageRectWin = tempMessageWin.get_rect(center=(675, 150))
+    
+    tempMessageLose = theFont.render("You Lose", False, "white") #temperary message
+    tempMessageRectLose = tempMessageLose.get_rect(center=(675, 150))
    
     tempMessageDiffThree = theFont.render("(2)Normal", False, "black") #temperary difficulty option
     tempMessageRectDiffThree = tempMessageDiffThree.get_rect(center=(675, 400))
@@ -128,6 +153,7 @@ def main():
     diffHard = False
     diffExtreme = False
     answered = False
+    playerTurn = True
    
     #timers
     startUpTimer = pygame.USEREVENT + 1
@@ -165,6 +191,7 @@ def main():
                         
                     elif event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
                         pass
+                        #prevents enter from being typed
  
                     # Unicode standard is used for string
                     # formation
@@ -200,38 +227,146 @@ def main():
             screen.blit(tempMessageDiffFour, tempMessageRectDiffFour)
             screen.blit(tempMessageDiffFive, tempMessageRectDiffFive)
             if diffEasy:
-                screen.fill("black")
-                screen.blit(tempMessageEasy, tempMessageRectEasy)
-                pygame.draw.rect(screen, "red", answerMessageRect)
-                screen.blit(answerMessage, answerMessageRect)
-               
-                if textActive:
-                    color = color_active
-                else:
-                    color = color_passive
-         
-                # draw rectangle and argument passed which should
-                # be on screen
-                pygame.draw.rect(screen, color, inputRect)
- 
-                text_surface = theFont.render(userText, True, (255, 255, 255))
-     
-                # render at position stated in arguments
-                screen.blit(text_surface, (inputRect.x+5, inputRect.y+5))
+                if win and done:
+                    screen.fill("black")
+                    screen.blit(tempMessageWin, tempMessageRectWin)
+                    
+                    pygame.draw.rect(screen, "red", playerDamageRect)
+                    pygame.draw.rect(screen, "green", playerHealthRect)
+                    
+                    pygame.draw.rect(screen, "red", otherDamageRect)
+                    pygame.draw.rect(screen, "green", otherHealthRect)
+                    
+                if win == False and done:
+                    screen.fill("black")
+                    screen.blit(tempMessageLose, tempMessageRectLose)
+                    
+                    pygame.draw.rect(screen, "red", playerDamageRect)
+                    pygame.draw.rect(screen, "green", playerHealthRect)
+                    
+                    pygame.draw.rect(screen, "red", otherDamageRect)
+                    pygame.draw.rect(screen, "green", otherHealthRect)
                 
-                pygame.draw.rect(screen, "red", damageRect)
-                pygame.draw.rect(screen, "green", healthRect)
-     
-                # set width of textfield so that text cannot get
-                # outside of user's text input
-                inputRect.w = max(100, text_surface.get_width()+10)
-               
-                if answered:
-                    if userText == "4":
-                        healthRect.update(1000, 500, michael - 20, 25)
-
+                if playerTurn and done == False:
+                    battleTimer = int(pygame.time.get_ticks() / 100)
+                    screen.fill("black")
+                    screen.blit(tempMessageEasy, tempMessageRectEasy)
+                    pygame.draw.rect(screen, "red", answerMessageRect)
+                    screen.blit(answerMessage, answerMessageRect)
+                
+                    if textActive:
+                        color = color_active
                     else:
+                        color = color_passive
+            
+                    # draw rectangle and argument passed which should
+                    # be on screen
+                    pygame.draw.rect(screen, color, inputRect)
+    
+                    text_surface = theFont.render(userText, True, (255, 255, 255))
+        
+                    # render at position stated in arguments
+                    screen.blit(text_surface, (inputRect.x+5, inputRect.y+5))
+                    
+                    pygame.draw.rect(screen, "red", playerDamageRect)
+                    pygame.draw.rect(screen, "green", playerHealthRect)
+                    
+                    pygame.draw.rect(screen, "red", otherDamageRect)
+                    pygame.draw.rect(screen, "green", otherHealthRect)
+        
+                    # set width of textfield so that text cannot get
+                    # outside of user's text input
+                    inputRect.w = max(100, text_surface.get_width()+10)
+                    
+                    if battleTimer - weezer <= 150:
+                        alvin = theodre - (battleTimer - weezer)
+                
+                    if answered:
+                        if userText == "4":
+                            
+                            if alvin < 0:
+                                alvin = 0
+                            
+                            michael = michael - alvin
+                            
+                            if michael < 0:
+                                michael = 0
+                                
+                            if michael == 0:
+                                otherHealthRect.update(1000, 175, michael, 25)
+                                win = True
+                                done = True
+                                correct = False
+                                answered = False
+                                textActive = False
+                                playerTurn = False
+                                kat = False
+                                carl = 0
+                                weezer = 0
+                                
+                            else:
+                                otherHealthRect.update(1000, 175, michael, 25)
+                                screen.blit(secretMessage, secretMessageRect)
+                                correct = True
+                                answered = False
+                                textActive = False
+                                playerTurn = False
+                                kat = False
+                                carl = 0
+                                weezer = battleTimer
+
+                        else:
+                            screen.blit(wrongMessage, wrongMessageRect)
+                            correct = False
+                            answered = False
+                            textActive = False
+                            playerTurn = False
+                            kat = False
+                            carl = 0
+                            weezer = battleTimer
+                            
+                elif playerTurn == False and done == False:
+                    
+                    ash = int(pygame.time.get_ticks() / 100)
+                    screen.fill("black")
+                    screen.blit(tempMessageTurn, tempMessageRectTurn)
+                    
+                    if correct == False:
                         screen.blit(wrongMessage, wrongMessageRect)
+                    else:
+                        screen.blit(secretMessage, secretMessageRect)
+                    
+                    pygame.draw.rect(screen, "red", playerDamageRect)
+                    pygame.draw.rect(screen, "green", playerHealthRect)
+                    
+                    pygame.draw.rect(screen, "red", otherDamageRect)
+                    pygame.draw.rect(screen, "green", otherHealthRect)
+                    
+                    if ash % 2 == 0:
+                        carl += 1
+                        
+                    if carl == 10:
+                        kat = True
+                    
+                    if kat:
+                        simon = simon - randint(10, 150)
+                        
+                        if simon < 0:
+                            simon = 0
+                            
+                        if simon == 0:
+                            playerHealthRect.update(100, 500, simon, 25)
+                            done = True
+                            kat = False
+                            carl = 0
+                            weezer = 0
+                        
+                        else:
+                            playerHealthRect.update(100, 500, simon, 25)
+                            
+                            playerTurn = True
+                            userText = "Input Here"
+                        
                
             if diffNormal:
                 screen.fill("black")

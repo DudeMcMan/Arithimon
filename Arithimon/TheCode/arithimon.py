@@ -44,7 +44,70 @@ class battleScreen(pygame.sprite.Sprite):
        
         self.image = battleScreen1
         self.rect = self.image.get_rect(center=(675, 400))
-   
+
+class playerAppleKun(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+       
+        playerAppleKun = pygame.image.load("Items/Apple-kun.png").convert_alpha()
+        playerAppleKun = pygame.transform.scale_by(playerAppleKun, (2, 2))
+        playerAppleKun = pygame.transform.flip(playerAppleKun, True, False)
+       
+        self.image = playerAppleKun
+        self.rect = self.image.get_rect(center=(200, 400))
+
+class enemyAppleKun(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+       
+        enemyAppleKun = pygame.image.load("Items/Apple-kun.png").convert_alpha()
+        enemyAppleKun = pygame.transform.scale_by(enemyAppleKun, (2, 2))
+       
+        self.image = enemyAppleKun
+        self.rect = self.image.get_rect(center=(1150, 315))
+        
+class playerBarry(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+       
+        playerBarry = pygame.image.load("Items/Barry.png").convert_alpha()
+        playerBarry = pygame.transform.scale_by(playerBarry, (2, 2))
+        playerBarry = pygame.transform.flip(playerBarry, True, False)
+       
+        self.image = playerBarry
+        self.rect = self.image.get_rect(center=(200, 350))
+
+class enemyBarry(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+       
+        enemyBarry = pygame.image.load("Items/Barry.png").convert_alpha()
+        enemyBarry = pygame.transform.scale_by(enemyBarry, (2, 2))
+       
+        self.image = enemyBarry
+        self.rect = self.image.get_rect(center=(1150, 315))
+
+class playerRuley(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+       
+        playerRuley = pygame.image.load("Items/Ruley.png").convert_alpha()
+        playerRuley = pygame.transform.scale_by(playerRuley, (2, 2))
+        playerRuley = pygame.transform.flip(playerRuley, True, False)
+       
+        self.image = playerRuley
+        self.rect = self.image.get_rect(center=(200, 370))
+
+class enemyRuley(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+       
+        enemyRuley = pygame.image.load("Items/Ruley.png").convert_alpha()
+        enemyRuley = pygame.transform.scale_by(enemyRuley, (2, 2))
+       
+        self.image = enemyRuley
+        self.rect = self.image.get_rect(center=(1150, 340))
+
 def main():
     pygame.init()
     pygame.display.set_caption('Arithimon') #window name
@@ -63,36 +126,42 @@ def main():
     theodre = 200 #damage deduction base
     ash = 0 #time stayed on enemy turn
     kat = False #to help change screen
-    beavis = 0
-    butthead = False
+    beavis = 0 #for character sprite randomization
+    butthead = 0 #for character sprite randomization
     correct = False #tells if answer is correct
-    carl = 0
-    weezer = 0
-    win = False
-    done = False
+    carl = 0 #to slow down the game a bit
+    weezer = 0 #to help with damage calc
+    win = False #tells if the player has won
+    done = False #tells if the match is over
    
     userText = "Input Here"
  
     # text rect
-    inputRect = pygame.Rect(200, 200, 140, 32)
+    inputRect = pygame.Rect(580, 200, 140, 32)
     playerHealthRect = pygame.Rect(100, 500, michael, 25)
     playerDamageRect = pygame.Rect(100, 500, 200, 25)
     otherHealthRect = pygame.Rect(1000, 175, michael, 25)
     otherDamageRect = pygame.Rect(1000, 175, 200, 25)
    
-    # color_active stores color(lightskyblue3) which
+    # colorActive stores color(lightskyblue3) which
     # gets active when input box is clicked by user
-    color_active = pygame.Color('lightskyblue3')
+    colorActive = pygame.Color('lightskyblue3')
  
-    # color_passive store color(chartreuse4) which is
+    # colorPassive store color(chartreuse4) which is
     # color of input box.
-    color_passive = pygame.Color('chartreuse4')
-    color = color_passive
+    colorPassive = pygame.Color('chartreuse4')
+    color = colorPassive
  
     textActive = False
    
     title = pygame.sprite.Group()#the title
     title.add(theABCD())
+    
+    playerSprite = pygame.sprite.Group()
+    #playerSprite.add(playerBarry())
+    
+    enemySprite = pygame.sprite.Group()
+    #enemySprite.add(enemyBarry())
    
     theFont = pygame.font.Font("Items/Pixeltype.ttf", 50) #The font, most likely temperary
    
@@ -200,6 +269,25 @@ def main():
            
             if gameActive:
                 if diffSelect:
+                    if beavis == 0:
+                        beavis = randint(1, 3)
+                    if butthead == 0:
+                        butthead = randint(1, 3)
+                    
+                    if beavis == 1:
+                        playerSprite.add(playerAppleKun())
+                    elif beavis == 2:
+                        playerSprite.add(playerBarry())
+                    elif beavis == 3:
+                        playerSprite.add(playerRuley())
+                        
+                    if butthead == 1:
+                        enemySprite.add(enemyAppleKun())
+                    elif butthead == 2:
+                        enemySprite.add(enemyBarry())
+                    elif butthead == 3:
+                        enemySprite.add(enemyRuley())
+                    
                     if event.type == pygame.KEYDOWN and event.key == pygame.K_1 or event.type == pygame.KEYDOWN and event.key == pygame.K_KP_1:
                         diffEasy = True
                         diffSelect = False
@@ -228,7 +316,7 @@ def main():
             screen.blit(tempMessageDiffFive, tempMessageRectDiffFive)
             if diffEasy:
                 if win and done:
-                    screen.fill("black")
+                    screen.fill("blue")
                     screen.blit(tempMessageWin, tempMessageRectWin)
                     
                     pygame.draw.rect(screen, "red", playerDamageRect)
@@ -237,8 +325,11 @@ def main():
                     pygame.draw.rect(screen, "red", otherDamageRect)
                     pygame.draw.rect(screen, "green", otherHealthRect)
                     
+                    playerSprite.draw(screen)
+                    enemySprite.draw(screen)
+                    
                 if win == False and done:
-                    screen.fill("black")
+                    screen.fill("blue")
                     screen.blit(tempMessageLose, tempMessageRectLose)
                     
                     pygame.draw.rect(screen, "red", playerDamageRect)
@@ -246,18 +337,23 @@ def main():
                     
                     pygame.draw.rect(screen, "red", otherDamageRect)
                     pygame.draw.rect(screen, "green", otherHealthRect)
+                    
+                    playerSprite.draw(screen)
+                    enemySprite.draw(screen)
                 
                 if playerTurn and done == False:
                     battleTimer = int(pygame.time.get_ticks() / 100)
-                    screen.fill("black")
+                    screen.fill("blue")
                     screen.blit(tempMessageEasy, tempMessageRectEasy)
                     pygame.draw.rect(screen, "red", answerMessageRect)
                     screen.blit(answerMessage, answerMessageRect)
+                    playerSprite.draw(screen)
+                    enemySprite.draw(screen)
                 
                     if textActive:
-                        color = color_active
+                        color = colorActive
                     else:
-                        color = color_passive
+                        color = colorPassive
             
                     # draw rectangle and argument passed which should
                     # be on screen
@@ -328,7 +424,7 @@ def main():
                 elif playerTurn == False and done == False:
                     
                     ash = int(pygame.time.get_ticks() / 100)
-                    screen.fill("black")
+                    screen.fill("blue")
                     screen.blit(tempMessageTurn, tempMessageRectTurn)
                     
                     if correct == False:
@@ -341,6 +437,9 @@ def main():
                     
                     pygame.draw.rect(screen, "red", otherDamageRect)
                     pygame.draw.rect(screen, "green", otherHealthRect)
+                    
+                    playerSprite.draw(screen)
+                    enemySprite.draw(screen)
                     
                     if ash % 2 == 0:
                         carl += 1
@@ -380,6 +479,7 @@ def main():
        
         else:
             title.draw(screen)
+            #playerSprite.draw(screen)
             if event.type == startUpTimer:
                 if jeremy == 0:
                     jeremy = 1

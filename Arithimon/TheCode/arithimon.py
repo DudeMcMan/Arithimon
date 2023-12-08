@@ -163,7 +163,7 @@ def main():
     enemySprite = pygame.sprite.Group()
     #enemySprite.add(enemyBarry())
    
-    theFont = pygame.font.Font("Items/Pixeltype.ttf", 50) #The font, most likely temperary
+    theFont = pygame.font.Font("Items/Pixeltype.ttf", 50) #The font, most likely temporary
    
     gameMessage = theFont.render("Press Enter To Start", False, "black") #how to start the game
     gameMessageRect = gameMessage.get_rect(center=(400, 450))
@@ -171,47 +171,51 @@ def main():
     secretMessage = theFont.render("Sick", False, "white") #for fun
     secretMessageRect = secretMessage.get_rect(center=(675, 400))
    
-    answerMessage = theFont.render("Click To Answer (Or Press Enter)", False, "white") #temperary answer button
+    answerMessage = theFont.render("Click To Answer (Or Press Enter)", False, "white") #temporary answer button
     answerMessageRect = answerMessage.get_rect(center=(675, 600))
    
-    wrongMessage = theFont.render("Incorrect", False, "white") #temperary answer button
+    wrongMessage = theFont.render("Incorrect", False, "white") #temporary answer button
     wrongMessageRect = wrongMessage.get_rect(center=(675, 400))
    
    
-    tempMessage = theFont.render("Select Your Difficulty (only easy works)", False, "black") #temperary start game message
+    tempMessage = theFont.render("Select Your Difficulty (only easy works)", False, "black") #temporary start game message
     tempMessageRect = tempMessage.get_rect(center=(675, 150))
    
-    tempMessageDiffTwo = theFont.render("(1)Easy", False, "black") #temperary difficulty option
+    tempMessageDiffTwo = theFont.render("(1)Easy", False, "black") #temporary difficulty option
     tempMessageRectDiffTwo = tempMessageDiffTwo.get_rect(center=(675, 300))
-   
-    tempMessageEasy = theFont.render("What's 2 + 2?", False, "white") #temperary message
+
+    questionChoice = randint(1,15)
+    easyQuestions = {1: "3 + 2 = ?", 2: "5 + 6 = ?", 3: "7 + 5 = ?", 4: "14 + 3 = ?", 5: "3 - 1 = ?", 6: "7 - 3 = ?", 7: "12 - 4 = ?", 8: "16 - 0 = ?", 9: "3 x 1 = ?", 10: "4 x 2 = ?", 11: "4 x 4 = ?", 12: "2 x 12 = ?", 13: "4 / 1 = ?", 14: "6 / 2 = ?", 15: "18 / 6 = ?"}
+    easyQuestionAnswers = {1: "5", 2: "11", 3: "12", 4: "17", 5: "2", 6: "4", 7: "8", 8: "16", 9: "3", 10: "8", 11: "16", 12: "24", 13: "4", 14: "3", 15: "3"} #Matches answer to question
+    
+    tempMessageEasy = theFont.render(easyQuestions[questionChoice], False, "white") #temporary message
     tempMessageRectEasy = tempMessageEasy.get_rect(center=(675, 150))
     
-    tempMessageTurn = theFont.render("Enemy Turn", False, "white") #temperary message
+    tempMessageTurn = theFont.render("Enemy Turn", False, "white") #temporary message
     tempMessageRectTurn = tempMessageTurn.get_rect(center=(675, 150))
     
-    tempMessageWin = theFont.render("You Win", False, "white") #temperary message
+    tempMessageWin = theFont.render("You Win", False, "white") #temporary message
     tempMessageRectWin = tempMessageWin.get_rect(center=(675, 150))
     
-    tempMessageLose = theFont.render("You Lose", False, "white") #temperary message
+    tempMessageLose = theFont.render("You Lose", False, "white") #temporary message
     tempMessageRectLose = tempMessageLose.get_rect(center=(675, 150))
    
-    tempMessageDiffThree = theFont.render("(2)Normal", False, "black") #temperary difficulty option
+    tempMessageDiffThree = theFont.render("(2)Normal", False, "black") #temporary difficulty option
     tempMessageRectDiffThree = tempMessageDiffThree.get_rect(center=(675, 400))
    
-    tempMessageNormal = theFont.render("Normal Mode Selected", False, "white") #temperary message
+    tempMessageNormal = theFont.render("Normal Mode Selected", False, "white") #temporary message
     tempMessageRectNormal = tempMessageNormal.get_rect(center=(675, 150))
    
-    tempMessageDiffFour = theFont.render("(3)Hard", False, "black") #temperary difficulty option
+    tempMessageDiffFour = theFont.render("(3)Hard", False, "black") #temporary difficulty option
     tempMessageRectDiffFour = tempMessageDiffFour.get_rect(center=(675, 500))
    
-    tempMessageHard = theFont.render("Hard Mode Selected", False, "white") #temperary message
+    tempMessageHard = theFont.render("Hard Mode Selected", False, "white") #temporary message
     tempMessageRectHard = tempMessageHard.get_rect(center=(675, 150))
    
-    tempMessageDiffFive = theFont.render("(4)Extreme", False, "black") #temperary difficulty option
+    tempMessageDiffFive = theFont.render("(4)Extreme", False, "black") #temporary difficulty option
     tempMessageRectDiffFive = tempMessageDiffFive.get_rect(center=(675, 600))
    
-    tempMessageExtreme = theFont.render("Extreme Mode Selected", False, "white") #temperary message
+    tempMessageExtreme = theFont.render("Extreme Mode Selected", False, "white") #temporary message
     tempMessageRectExtreme = tempMessageExtreme.get_rect(center=(675, 150))
    
    
@@ -378,7 +382,7 @@ def main():
                         alvin = theodre - (battleTimer - weezer)
                 
                     if answered:
-                        if userText == "4":
+                        if userText == easyQuestionAnswers[questionChoice]:
                             
                             if alvin < 0:
                                 alvin = 0
@@ -465,6 +469,10 @@ def main():
                             
                             playerTurn = True
                             userText = "Input Here"
+
+                            if(diffEasy):
+                                questionChoice = randint(1,15) #Chooses another random question from the easy list
+                                tempMessageEasy = theFont.render(easyQuestions[questionChoice], False, "white") #Replaces the message with new question
                         
                
             if diffNormal:

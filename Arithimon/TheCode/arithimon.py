@@ -199,6 +199,9 @@ def main():
     
     tempMessageLose = theFont.render("You Lose", False, "white") #temporary message
     tempMessageRectLose = tempMessageLose.get_rect(center=(675, 150))
+    
+    messageBack = theFont.render("Return to Difficulty Selection", False, "white") #temporary message
+    messageRectBack = messageBack.get_rect(center=(675, 500))
    
     tempMessageDiffThree = theFont.render("(2)Normal", False, "black") #temporary difficulty option
     tempMessageRectDiffThree = tempMessageDiffThree.get_rect(center=(675, 400))
@@ -239,6 +242,18 @@ def main():
                 exit()
                
             if event.type == pygame.MOUSEBUTTONDOWN:
+                
+                if messageRectBack.collidepoint(event.pos):
+                    diffSelect = True
+                    win = False
+                    done = False
+                    diffEasy = False
+                    diffNormal = False
+                    diffHard = False
+                    diffExtreme = False
+                    answered = False
+                    playerTurn = True
+                
                 if answerMessageRect.collidepoint(event.pos):
                     if textActive:
                         answered = True
@@ -273,6 +288,14 @@ def main():
            
             if gameActive:
                 if diffSelect:
+                        
+                    userText = "Input Here"
+                    michael = 200
+                    simon = 200
+                    
+                    otherHealthRect.update(1000, 175, michael, 25)
+                    playerHealthRect.update(100, 500, simon, 25)
+                    
                     if beavis == 0:
                         beavis = randint(1, 3)
                     if butthead == 0:
@@ -320,9 +343,11 @@ def main():
             screen.blit(tempMessageDiffFive, tempMessageRectDiffFive)
             if diffEasy:
                 if win and done:
-                    screen.fill("blue")
+                    screen.fill("gray")
                     screen.blit(tempMessageWin, tempMessageRectWin)
                     
+                    screen.blit(messageBack, messageRectBack)
+                    
                     pygame.draw.rect(screen, "red", playerDamageRect)
                     pygame.draw.rect(screen, "green", playerHealthRect)
                     
@@ -331,10 +356,15 @@ def main():
                     
                     playerSprite.draw(screen)
                     enemySprite.draw(screen)
+                    
+                    questionChoice = randint(1,15) #Chooses another random question from the easy list
+                    tempMessageEasy = theFont.render(easyQuestions[questionChoice], False, "white") #Replaces the message with new question
                     
                 if win == False and done:
-                    screen.fill("blue")
+                    screen.fill("gray")
                     screen.blit(tempMessageLose, tempMessageRectLose)
+                    
+                    screen.blit(messageBack, messageRectBack)
                     
                     pygame.draw.rect(screen, "red", playerDamageRect)
                     pygame.draw.rect(screen, "green", playerHealthRect)
@@ -344,10 +374,13 @@ def main():
                     
                     playerSprite.draw(screen)
                     enemySprite.draw(screen)
+                    
+                    questionChoice = randint(1,15) #Chooses another random question from the easy list
+                    tempMessageEasy = theFont.render(easyQuestions[questionChoice], False, "white") #Replaces the message with new question
                 
                 if playerTurn and done == False:
                     battleTimer = int(pygame.time.get_ticks() / 100)
-                    screen.fill("blue")
+                    screen.fill("gray")
                     screen.blit(tempMessageEasy, tempMessageRectEasy)
                     pygame.draw.rect(screen, "red", answerMessageRect)
                     screen.blit(answerMessage, answerMessageRect)
@@ -428,7 +461,7 @@ def main():
                 elif playerTurn == False and done == False:
                     
                     ash = int(pygame.time.get_ticks() / 100)
-                    screen.fill("blue")
+                    screen.fill("gray")
                     screen.blit(tempMessageTurn, tempMessageRectTurn)
                     
                     if correct == False:
@@ -474,7 +507,6 @@ def main():
                                 questionChoice = randint(1,15) #Chooses another random question from the easy list
                                 tempMessageEasy = theFont.render(easyQuestions[questionChoice], False, "white") #Replaces the message with new question
                         
-               
             if diffNormal:
                 screen.fill("black")
                 screen.blit(tempMessageNormal, tempMessageRectNormal)

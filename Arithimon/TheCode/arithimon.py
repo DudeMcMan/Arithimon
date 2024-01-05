@@ -108,6 +108,46 @@ class enemyRuley(pygame.sprite.Sprite):
         self.image = enemyRuley
         self.rect = self.image.get_rect(center=(1150, 340))
 
+class Question:
+    questionText = ""
+    answer = 0
+    def createEasy():
+        temp = randint(1,4)
+        # temp = 2
+        if(temp==1):
+            #+
+            firstInt = randint(0,12)
+            secondInt = randint(0,12)
+            Question.questionText = str(firstInt)+" + "+str(secondInt)+" = ?"
+            Question.answer = firstInt+secondInt
+        elif(temp==2):
+            #-
+            firstInt = randint(0,12)
+            secondInt = randint(0,12)
+            while(firstInt-secondInt<0):
+                firstInt = randint(0,12)
+                secondInt = randint(0,12)
+            Question.questionText = str(firstInt)+" - "+str(secondInt)+" = ?"
+            Question.answer = firstInt-secondInt
+        elif(temp==3):
+            #*
+            firstInt = randint(0,12)
+            secondInt = randint(0,12)
+            while(firstInt*secondInt>50):
+                firstInt = randint(0,12)
+                secondInt = randint(0,12)
+            Question.questionText = str(firstInt)+" * "+str(secondInt)+" = ?"
+            Question.answer = firstInt*secondInt
+        else:
+            #/
+            firstInt = randint(0,12)
+            secondInt = randint(1,12)
+            while(firstInt%secondInt!=0):
+                firstInt = randint(0,12)
+                secondInt = randint(1,12)
+            Question.questionText = str(firstInt)+" / "+str(secondInt)+" = ?"
+            Question.answer = (int)(firstInt/secondInt)
+
 def main():
     pygame.init()
     pygame.display.set_caption('Arithimon') #window name
@@ -183,12 +223,9 @@ def main():
    
     tempMessageDiffTwo = theFont.render("(1)Easy", False, "black") #temporary difficulty option
     tempMessageRectDiffTwo = tempMessageDiffTwo.get_rect(center=(675, 300))
-
-    questionChoice = randint(1,15)
-    easyQuestions = {1: "3 + 2 = ?", 2: "5 + 6 = ?", 3: "7 + 5 = ?", 4: "14 + 3 = ?", 5: "3 - 1 = ?", 6: "7 - 3 = ?", 7: "12 - 4 = ?", 8: "16 - 0 = ?", 9: "3 x 1 = ?", 10: "4 x 2 = ?", 11: "4 x 4 = ?", 12: "2 x 12 = ?", 13: "4 / 1 = ?", 14: "6 / 2 = ?", 15: "18 / 6 = ?"}
-    easyQuestionAnswers = {1: "5", 2: "11", 3: "12", 4: "17", 5: "2", 6: "4", 7: "8", 8: "16", 9: "3", 10: "8", 11: "16", 12: "24", 13: "4", 14: "3", 15: "3"} #Matches answer to question
     
-    tempMessageEasy = theFont.render(easyQuestions[questionChoice], False, "white") #temporary message
+    Question.createEasy() #Creates an initial easy question
+    tempMessageEasy = theFont.render(Question.questionText, False, "white") #temporary message
     tempMessageRectEasy = tempMessageEasy.get_rect(center=(675, 150))
     
     tempMessageTurn = theFont.render("Enemy Turn", False, "white") #temporary message
@@ -199,6 +236,9 @@ def main():
     
     tempMessageLose = theFont.render("You Lose", False, "white") #temporary message
     tempMessageRectLose = tempMessageLose.get_rect(center=(675, 150))
+    
+    messageBack = theFont.render("Return to Difficulty Selection", False, "white") #temporary message
+    messageRectBack = messageBack.get_rect(center=(675, 500))
    
     tempMessageDiffThree = theFont.render("(2)Normal", False, "black") #temporary difficulty option
     tempMessageRectDiffThree = tempMessageDiffThree.get_rect(center=(675, 400))
@@ -233,14 +273,27 @@ def main():
     pygame.time.set_timer(startUpTimer, 2000)
    
     while True:
+        battleTimer = int(pygame.time.get_ticks() / 100) #Every tenth of a second is tracked
         for event in pygame.event.get():
             if event.type == pygame.QUIT: #this will close the game
                 pygame.quit()
                 exit()
                
             if event.type == pygame.MOUSEBUTTONDOWN:
+                
+                if messageRectBack.collidepoint(event.pos):
+                    diffSelect = True
+                    win = False
+                    done = False
+                    diffEasy = False
+                    diffNormal = False
+                    diffHard = False
+                    diffExtreme = False
+                    answered = False
+                    playerTurn = True
+                
                 if answerMessageRect.collidepoint(event.pos):
-                    if textActive:
+                    if userText != "Input Here":
                         answered = True
                
                 if inputRect.collidepoint(event.pos):
@@ -273,6 +326,14 @@ def main():
            
             if gameActive:
                 if diffSelect:
+                        
+                    userText = "Input Here"
+                    michael = 200
+                    simon = 200
+                    
+                    otherHealthRect.update(1000, 175, michael, 25)
+                    playerHealthRect.update(100, 500, simon, 25)
+                    
                     if beavis == 0:
                         beavis = randint(1, 3)
                     if butthead == 0:
@@ -295,6 +356,7 @@ def main():
                     if event.type == pygame.KEYDOWN and event.key == pygame.K_1 or event.type == pygame.KEYDOWN and event.key == pygame.K_KP_1:
                         diffEasy = True
                         diffSelect = False
+                        weezer = battleTimer
                     if event.type == pygame.KEYDOWN and event.key == pygame.K_2 or event.type == pygame.KEYDOWN and event.key == pygame.K_KP_2:
                         diffNormal = True
                         diffSelect = False
@@ -318,10 +380,13 @@ def main():
             screen.blit(tempMessageDiffThree, tempMessageRectDiffThree)
             screen.blit(tempMessageDiffFour, tempMessageRectDiffFour)
             screen.blit(tempMessageDiffFive, tempMessageRectDiffFive)
+            
             if diffEasy:
-                if win and done:
-                    screen.fill("blue")
+                if win and done: #Won
+                    screen.fill("gray")
                     screen.blit(tempMessageWin, tempMessageRectWin)
+                    
+                    screen.blit(messageBack, messageRectBack)
                     
                     pygame.draw.rect(screen, "red", playerDamageRect)
                     pygame.draw.rect(screen, "green", playerHealthRect)
@@ -331,10 +396,15 @@ def main():
                     
                     playerSprite.draw(screen)
                     enemySprite.draw(screen)
+
+                    Question.createEasy()
+                    tempMessageEasy = theFont.render(Question.questionText, False, "white") #Replaces the message with new question
                     
-                if win == False and done:
-                    screen.fill("blue")
+                if win == False and done: #Lost
+                    screen.fill("gray")
                     screen.blit(tempMessageLose, tempMessageRectLose)
+                    
+                    screen.blit(messageBack, messageRectBack)
                     
                     pygame.draw.rect(screen, "red", playerDamageRect)
                     pygame.draw.rect(screen, "green", playerHealthRect)
@@ -345,9 +415,9 @@ def main():
                     playerSprite.draw(screen)
                     enemySprite.draw(screen)
                 
-                if playerTurn and done == False:
-                    battleTimer = int(pygame.time.get_ticks() / 100)
-                    screen.fill("blue")
+                if playerTurn and done == False: #Player turn
+                    
+                    screen.fill("gray")
                     screen.blit(tempMessageEasy, tempMessageRectEasy)
                     pygame.draw.rect(screen, "red", answerMessageRect)
                     screen.blit(answerMessage, answerMessageRect)
@@ -378,11 +448,11 @@ def main():
                     # outside of user's text input
                     inputRect.w = max(100, text_surface.get_width()+10)
                     
-                    if battleTimer - weezer <= 150:
+                    if battleTimer - weezer <= 150: #Damage minimum of 50. Maximum time is 15 seconds
                         alvin = theodre - (battleTimer - weezer)
                 
                     if answered:
-                        if userText == easyQuestionAnswers[questionChoice]:
+                        if userText == str(Question.answer):
                             
                             if alvin < 0:
                                 alvin = 0
@@ -425,10 +495,10 @@ def main():
                             carl = 0
                             weezer = battleTimer
                             
-                elif playerTurn == False and done == False:
+                elif playerTurn == False and done == False: #Enemy turn
                     
                     ash = int(pygame.time.get_ticks() / 100)
-                    screen.fill("blue")
+                    screen.fill("gray")
                     screen.blit(tempMessageTurn, tempMessageRectTurn)
                     
                     if correct == False:
@@ -469,10 +539,9 @@ def main():
                             
                             playerTurn = True
                             userText = "Input Here"
-
-                            if(diffEasy):
-                                questionChoice = randint(1,15) #Chooses another random question from the easy list
-                                tempMessageEasy = theFont.render(easyQuestions[questionChoice], False, "white") #Replaces the message with new question
+                            weezer = battleTimer
+                            Question.createEasy()
+                            tempMessageEasy = theFont.render(Question.questionText, False, "white") #Replaces the message with new question
                         
                
             if diffNormal:

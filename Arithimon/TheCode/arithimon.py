@@ -1,6 +1,7 @@
 import pygame
 from sys import exit
 from random import randint
+from pygame import mixer
 
 # for running python3 TheCode/arithimon.py
 # assuming the directory is the same
@@ -113,7 +114,6 @@ class Question:
     answer = 0
     def createEasy():
         temp = randint(1,4)
-        # temp = 2
         if(temp==1):
             #+
             firstInt = randint(0,12)
@@ -157,7 +157,9 @@ def main():
     screen = pygame.display.set_mode((screenWidth, screenHeight)) #the display
    
     clock = pygame.time.Clock() #needed for frame rate
-   
+    
+    clickSound = pygame.mixer.Sound("Items/zipclick.wav") #Adds the click sound effect
+    
     jeremy = 0 # this is for the start up screen, so it can changeS
     michael = 200 # to make te health bar go down
     battleTimer = 0 #deducts from base
@@ -272,6 +274,11 @@ def main():
     startUpTimer = pygame.USEREVENT + 1
     pygame.time.set_timer(startUpTimer, 2000)
    
+    #Starts menu music immediately
+    mixer.init()
+    mixer.music.load('Items/menuMusic.wav')
+    mixer.music.set_volume(0.1)
+    mixer.music.play(-1)
     while True:
         battleTimer = int(pygame.time.get_ticks() / 100) #Every tenth of a second is tracked
         for event in pygame.event.get():
@@ -291,6 +298,10 @@ def main():
                     diffExtreme = False
                     answered = False
                     playerTurn = True
+                    clickSound.play()
+                    mixer.music.load('Items/menuMusic.wav')
+                    mixer.music.set_volume(0.1)
+                    mixer.music.play(-1)
                 
                 if answerMessageRect.collidepoint(event.pos):
                     if userText != "Input Here":
@@ -354,21 +365,30 @@ def main():
                         enemySprite.add(enemyRuley())
                     
                     if event.type == pygame.KEYDOWN and event.key == pygame.K_1 or event.type == pygame.KEYDOWN and event.key == pygame.K_KP_1:
+                        clickSound.play()
                         diffEasy = True
                         diffSelect = False
                         weezer = battleTimer
+                        mixer.music.stop()
+                        mixer.music.load('Items/battleMusic.wav')
+                        mixer.music.set_volume(0.2)
+                        mixer.music.play(-1)
                     if event.type == pygame.KEYDOWN and event.key == pygame.K_2 or event.type == pygame.KEYDOWN and event.key == pygame.K_KP_2:
+                        clickSound.play()
                         diffNormal = True
                         diffSelect = False
                     if event.type == pygame.KEYDOWN and event.key == pygame.K_3 or event.type == pygame.KEYDOWN and event.key == pygame.K_KP_3:
+                        clickSound.play()
                         diffHard = True
                         diffSelect = False
                     if event.type == pygame.KEYDOWN and event.key == pygame.K_4 or event.type == pygame.KEYDOWN and event.key == pygame.K_KP_4:
+                        clickSound.play()
                         diffExtreme = True
                         diffSelect = False
             else:
                 #How to start the game
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN or event.type == pygame.KEYDOWN and event.key == pygame.K_KP_ENTER:
+                    clickSound.play()
                     gameActive = True
                     diffSelect = True
                    
@@ -383,6 +403,7 @@ def main():
             
             if diffEasy:
                 if win and done: #Won
+                    
                     screen.fill("gray")
                     screen.blit(tempMessageWin, tempMessageRectWin)
                     
@@ -401,6 +422,7 @@ def main():
                     tempMessageEasy = theFont.render(Question.questionText, False, "white") #Replaces the message with new question
                     
                 if win == False and done: #Lost
+                    mixer.music.stop()
                     screen.fill("gray")
                     screen.blit(tempMessageLose, tempMessageRectLose)
                     
@@ -473,6 +495,10 @@ def main():
                                 kat = False
                                 carl = 0
                                 weezer = 0
+                                mixer.music.stop()
+                                mixer.music.load('Items/victoryMusic.wav')
+                                mixer.music.set_volume(0.2)
+                                mixer.music.play(-1)
                                 
                             else:
                                 otherHealthRect.update(1000, 175, michael, 25)

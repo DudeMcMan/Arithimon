@@ -108,6 +108,357 @@ class enemyRuley(pygame.sprite.Sprite):
         self.image = enemyRuley
         self.rect = self.image.get_rect(center=(1150, 340))
 
+class Question:
+    questionText = ""
+    answer = 0
+    def createEasy():
+        temp = randint(1,4)
+        # temp = 2
+        if(temp==1):
+            #+
+            firstInt = randint(0,12)
+            secondInt = randint(0,12)
+            Question.questionText = str(firstInt)+" + "+str(secondInt)+" = ?"
+            Question.answer = firstInt+secondInt
+        elif(temp==2):
+            #-
+            firstInt = randint(0,12)
+            secondInt = randint(0,12)
+            while(firstInt-secondInt<0):
+                firstInt = randint(0,12)
+                secondInt = randint(0,12)
+            Question.questionText = str(firstInt)+" - "+str(secondInt)+" = ?"
+            Question.answer = firstInt-secondInt
+        elif(temp==3):
+            #*
+            firstInt = randint(0,12)
+            secondInt = randint(0,12)
+            while(firstInt*secondInt>50):
+                firstInt = randint(0,12)
+                secondInt = randint(0,12)
+            Question.questionText = str(firstInt)+" * "+str(secondInt)+" = ?"
+            Question.answer = firstInt*secondInt
+        else:
+            #/
+            firstInt = randint(0,12)
+            secondInt = randint(1,12)
+            while(firstInt%secondInt!=0):
+                firstInt = randint(0,12)
+                secondInt = randint(1,12)
+            Question.questionText = str(firstInt)+" / "+str(secondInt)+" = ?"
+            Question.answer = (int)(firstInt/secondInt)
+            
+    def createNormal():
+        temp = randint(1,4)
+        other = randint(1, 3)
+        order = randint(1, 4)
+        #temp = 1
+        if(temp==1):
+            #+
+            firstInt = randint(0,12)
+            secondInt = randint(1,12)
+            thirdInt = randint(1, 12)
+            fourthInt = 0
+            #Question.questionText = str(firstInt)+" + "+str(secondInt)+" = ?"
+            #Question.answer = firstInt+secondInt
+            if other == 1:
+                #-
+                if order % 2 == 0:
+                    Question.questionText = str(firstInt)+" + "+str(secondInt)+" - " + str(thirdInt) + " = ?"
+                    Question.answer = firstInt + secondInt - thirdInt
+                else:
+                    Question.questionText = str(firstInt)+" - "+str(secondInt)+" + " + str(thirdInt) + " = ?"
+                    Question.answer = firstInt - secondInt + thirdInt
+                    
+            elif other == 2:
+                #*
+                if order % 2 == 0:
+                    Question.questionText = str(firstInt)+" + "+str(secondInt)+" * " + str(thirdInt) + " = ?"
+                    Question.answer = firstInt + secondInt * thirdInt
+                else:
+                    Question.questionText = str(firstInt)+" * "+str(secondInt)+" + " + str(thirdInt) + " = ?"
+                    Question.answer = firstInt * secondInt + thirdInt
+                    
+            else:
+                #/
+                while thirdInt == 0:
+                    thirdInt = randint(1, 12)
+                if order == 1:
+                    while(secondInt % thirdInt!=0):
+                        firstInt = randint(0,12)
+                        secondInt = randint(0,12)
+                        thirdInt = randint(1, 12)
+                    Question.questionText = str(firstInt)+" + ("+str(secondInt)+" / " + str(thirdInt) + ") = ?"
+                    fourthInt = secondInt / thirdInt
+                    Question.answer = int(firstInt + fourthInt)
+                if order == 2:
+                    while(firstInt % secondInt!=0):
+                        firstInt = randint(0,12)
+                        secondInt = randint(1,12)
+                        thirdInt = randint(0, 12)
+                    Question.questionText = "(" + str(firstInt)+" / "+str(secondInt)+") + " + str(thirdInt) + " = ?"
+                    fourthInt = firstInt / secondInt
+                    Question.answer = int(fourthInt + thirdInt)
+                if order == 3:
+                    while((firstInt + secondInt) % thirdInt!=0):
+                        firstInt = randint(0,12)
+                        secondInt = randint(0,12)
+                        thirdInt = randint(1, 12)
+                    Question.questionText = "(" + str(firstInt)+" + "+str(secondInt)+") / " + str(thirdInt) + " = ?"
+                    fourthInt = firstInt + secondInt
+                    Question.answer = int(fourthInt / thirdInt)
+                if order == 4:
+                    while(firstInt % (secondInt + thirdInt)!=0):
+                        firstInt = randint(0,12)
+                        secondInt = randint(0,12)
+                        thirdInt = randint(1, 12)
+                    Question.questionText = str(firstInt)+" / ("+str(secondInt)+" + " + str(thirdInt) + ") = ?"
+                    fourthInt = secondInt + thirdInt
+                    Question.answer = int(firstInt / fourthInt)
+            
+        elif(temp==2):
+            #-
+            firstInt = randint(0,12)
+            secondInt = randint(1,12)
+            thirdInt = randint(1, 12)
+            #Question.questionText = str(firstInt)+" + "+str(secondInt)+" = ?"
+            #Question.answer = firstInt+secondInt
+            if other == 1:
+                #+
+                if order % 2 == 0:
+                    Question.questionText = str(firstInt)+" + "+str(secondInt)+" - " + str(thirdInt) + " = ?"
+                    Question.answer = firstInt + secondInt - thirdInt
+                else:
+                    Question.questionText = str(firstInt)+" - "+str(secondInt)+" + " + str(thirdInt) + " = ?"
+                    Question.answer = firstInt - secondInt + thirdInt
+                    
+            elif other == 2:
+                #*
+                if order % 2 == 0:
+                    Question.questionText = str(firstInt)+" - "+str(secondInt)+" * " + str(thirdInt) + " = ?"
+                    Question.answer = firstInt - secondInt * thirdInt
+                else:
+                    Question.questionText = str(firstInt)+" * "+str(secondInt)+" - " + str(thirdInt) + " = ?"
+                    Question.answer = firstInt * secondInt - thirdInt
+                    
+            else:
+                #/
+                while thirdInt == 0:
+                    thirdInt = randint(1, 12)
+                if order == 1:
+                    while(secondInt % thirdInt!=0):
+                        firstInt = randint(0,12)
+                        secondInt = randint(0,12)
+                        thirdInt = randint(1, 12)
+                    Question.questionText = str(firstInt)+" - ("+str(secondInt)+" / " + str(thirdInt) + ") = ?"
+                    fourthInt = secondInt / thirdInt
+                    Question.answer = int(firstInt - fourthInt)
+                if order == 2:
+                    while(firstInt % secondInt!=0):
+                        firstInt = randint(0,12)
+                        secondInt = randint(1,12)
+                        thirdInt = randint(0, 12)
+                    Question.questionText = "(" + str(firstInt)+" / "+str(secondInt)+") - " + str(thirdInt) + " = ?"
+                    fourthInt = firstInt / secondInt
+                    Question.answer = int(fourthInt - thirdInt)
+                if order == 3:
+                    while((firstInt - secondInt) % thirdInt!=0):
+                        firstInt = randint(0,12)
+                        secondInt = randint(0,12)
+                        thirdInt = randint(1, 12)
+                    Question.questionText = "(" + str(firstInt)+" - "+str(secondInt)+") / " + str(thirdInt) + " = ?"
+                    fourthInt = firstInt - secondInt
+                    Question.answer = int(fourthInt / thirdInt)
+                if order == 4:
+                    while(firstInt % (secondInt - thirdInt)!=0):
+                        firstInt = randint(0,12)
+                        secondInt = randint(0,12)
+                        thirdInt = randint(1, 12)
+                    Question.questionText = str(firstInt)+" / ("+str(secondInt)+" - " + str(thirdInt) + ") = ?"
+                    fourthInt = secondInt - thirdInt
+                    Question.answer = int(firstInt / fourthInt)
+            
+        elif(temp==3):
+            #*
+            firstInt = randint(0,12)
+            secondInt = randint(1,12)
+            thirdInt = randint(1, 12)
+            #Question.questionText = str(firstInt)+" + "+str(secondInt)+" = ?"
+            #Question.answer = firstInt+secondInt
+            if other == 1:
+                #-
+                if order % 2 == 0:
+                    Question.questionText = str(firstInt)+" * "+str(secondInt)+" - " + str(thirdInt) + " = ?"
+                    Question.answer = firstInt * secondInt - thirdInt
+                else:
+                    Question.questionText = str(firstInt)+" - "+str(secondInt)+" * " + str(thirdInt) + " = ?"
+                    Question.answer = firstInt - secondInt * thirdInt
+                    
+            elif other == 2:
+                #+
+                if order % 2 == 0:
+                    Question.questionText = str(firstInt)+" + "+str(secondInt)+" * " + str(thirdInt) + " = ?"
+                    Question.answer = firstInt + secondInt * thirdInt
+                else:
+                    Question.questionText = str(firstInt)+" * "+str(secondInt)+" + " + str(thirdInt) + " = ?"
+                    Question.answer = firstInt * secondInt + thirdInt
+                    
+            else:
+                #/
+                while thirdInt == 0:
+                    thirdInt = randint(1, 12)
+                if order == 1:
+                    while(secondInt % thirdInt!=0):
+                        firstInt = randint(0,12)
+                        secondInt = randint(0,12)
+                        thirdInt = randint(1, 12)
+                    Question.questionText = str(firstInt)+" * ("+str(secondInt)+" / " + str(thirdInt) + ") = ?"
+                    fourthInt = secondInt / thirdInt
+                    Question.answer = int(firstInt * fourthInt)
+                if order == 2:
+                    while(firstInt % secondInt!=0):
+                        firstInt = randint(0,12)
+                        secondInt = randint(1,12)
+                        thirdInt = randint(0, 12)
+                    Question.questionText = "(" + str(firstInt)+" / "+str(secondInt)+") * " + str(thirdInt) + " = ?"
+                    fourthInt = firstInt / secondInt
+                    Question.answer = int(fourthInt * thirdInt)
+                if order == 3:
+                    while((firstInt * secondInt) % thirdInt!=0):
+                        firstInt = randint(0,12)
+                        secondInt = randint(0,12)
+                        thirdInt = randint(1, 12)
+                    Question.questionText = "(" + str(firstInt)+" * "+str(secondInt)+") / " + str(thirdInt) + " = ?"
+                    fourthInt = firstInt * secondInt
+                    Question.answer = int(fourthInt / thirdInt)
+                if order == 4:
+                    while(firstInt % (secondInt * thirdInt)!=0):
+                        firstInt = randint(0,12)
+                        secondInt = randint(1,12)
+                        thirdInt = randint(1, 12)
+                    Question.questionText = str(firstInt)+" / ("+str(secondInt)+" * " + str(thirdInt) + ") = ?"
+                    fourthInt = secondInt * thirdInt
+                    Question.answer = int(firstInt / fourthInt)
+            
+        else:
+            #/
+            firstInt = randint(0,12)
+            secondInt = randint(1,12)
+            thirdInt = randint(1, 12)
+            fourthInt = 0
+            #Question.questionText = str(firstInt)+" + "+str(secondInt)+" = ?"
+            #Question.answer = firstInt+secondInt
+            if other == 1:
+                #-
+                while thirdInt == 0:
+                    thirdInt = randint(1, 12)
+                if order == 1:
+                    while(secondInt % thirdInt!=0):
+                        firstInt = randint(0,12)
+                        secondInt = randint(0,12)
+                        thirdInt = randint(1, 12)
+                    Question.questionText = str(firstInt)+" - ("+str(secondInt)+" / " + str(thirdInt) + ") = ?"
+                    fourthInt = secondInt / thirdInt
+                    Question.answer = int(firstInt - fourthInt)
+                if order == 2:
+                    while(firstInt % secondInt!=0):
+                        firstInt = randint(0,12)
+                        secondInt = randint(0,12)
+                        thirdInt = randint(1, 12)
+                    Question.questionText = "(" + str(firstInt)+" / "+str(secondInt)+") - " + str(thirdInt) + " = ?"
+                    fourthInt = firstInt / secondInt
+                    Question.answer = int(fourthInt - thirdInt)
+                if order == 3:
+                    while((firstInt - secondInt) % thirdInt!=0):
+                        firstInt = randint(0,12)
+                        secondInt = randint(0,12)
+                        thirdInt = randint(1, 12)
+                    Question.questionText = "(" + str(firstInt)+" - "+str(secondInt)+") / " + str(thirdInt) + " = ?"
+                    fourthInt = firstInt - secondInt
+                    Question.answer = int(fourthInt / thirdInt)
+                if order == 4:
+                    while(firstInt % (secondInt - thirdInt)!=0):
+                        firstInt = randint(0,12)
+                        secondInt = randint(0,12)
+                        thirdInt = randint(1, 12)
+                    Question.questionText = str(firstInt)+" / ("+str(secondInt)+" - " + str(thirdInt) + ") = ?"
+                    fourthInt = secondInt - thirdInt
+                    Question.answer = int(firstInt / fourthInt)
+                    
+            elif other == 2:
+                #*
+                while thirdInt == 0:
+                    thirdInt = randint(1, 12)
+                if order == 1:
+                    while(secondInt % thirdInt!=0):
+                        firstInt = randint(0,12)
+                        secondInt = randint(0,12)
+                        thirdInt = randint(1, 12)
+                    Question.questionText = str(firstInt)+" * ("+str(secondInt)+" / " + str(thirdInt) + ") = ?"
+                    fourthInt = secondInt / thirdInt
+                    Question.answer = int(firstInt * fourthInt)
+                if order == 2:
+                    while(firstInt % secondInt!=0):
+                        firstInt = randint(0,12)
+                        secondInt = randint(0,12)
+                        thirdInt = randint(1, 12)
+                    Question.questionText = "(" + str(firstInt)+" / "+str(secondInt)+") * " + str(thirdInt) + " = ?"
+                    fourthInt = firstInt / secondInt
+                    Question.answer = int(fourthInt * thirdInt)
+                if order == 3:
+                    while((firstInt * secondInt) % thirdInt!=0):
+                        firstInt = randint(0,12)
+                        secondInt = randint(0,12)
+                        thirdInt = randint(1, 12)
+                    Question.questionText = "(" + str(firstInt)+" * "+str(secondInt)+") / " + str(thirdInt) + " = ?"
+                    fourthInt = firstInt * secondInt
+                    Question.answer = int(fourthInt / thirdInt)
+                if order == 4:
+                    while(firstInt % (secondInt * thirdInt)!=0):
+                        firstInt = randint(0,12)
+                        secondInt = randint(0,12)
+                        thirdInt = randint(1, 12)
+                    Question.questionText = str(firstInt)+" / ("+str(secondInt)+" * " + str(thirdInt) + ") = ?"
+                    fourthInt = secondInt * thirdInt
+                    Question.answer = int(firstInt / fourthInt)
+                    
+            else:
+                #+
+                while thirdInt == 0:
+                    thirdInt = randint(1, 12)
+                if order == 1:
+                    while(secondInt % thirdInt!=0):
+                        firstInt = randint(0,12)
+                        secondInt = randint(0,12)
+                        thirdInt = randint(1, 12)
+                    Question.questionText = str(firstInt)+" + ("+str(secondInt)+" / " + str(thirdInt) + ") = ?"
+                    fourthInt = secondInt / thirdInt
+                    Question.answer = int(firstInt + fourthInt)
+                if order == 2:
+                    while(firstInt % secondInt!=0):
+                        firstInt = randint(0,12)
+                        secondInt = randint(0,12)
+                        thirdInt = randint(1, 12)
+                    Question.questionText = "(" + str(firstInt)+" / "+str(secondInt)+") + " + str(thirdInt) + " = ?"
+                    fourthInt = firstInt / secondInt
+                    Question.answer = int(fourthInt + thirdInt)
+                if order == 3:
+                    while((firstInt + secondInt) % thirdInt!=0):
+                        firstInt = randint(0,12)
+                        secondInt = randint(0,12)
+                        thirdInt = randint(1, 12)
+                    Question.questionText = "(" + str(firstInt)+" + "+str(secondInt)+") / " + str(thirdInt) + " = ?"
+                    fourthInt = firstInt + secondInt
+                    Question.answer = int(fourthInt / thirdInt)
+                if order == 4:
+                    while(firstInt % (secondInt + thirdInt)!=0):
+                        firstInt = randint(0,12)
+                        secondInt = randint(0,12)
+                        thirdInt = randint(1, 12)
+                    Question.questionText = str(firstInt)+" / ("+str(secondInt)+" + " + str(thirdInt) + ") = ?"
+                    fourthInt = secondInt + thirdInt
+                    Question.answer = int(firstInt / fourthInt)
+
 def main():
     pygame.init()
     pygame.display.set_caption('Arithimon') #window name
@@ -178,18 +529,19 @@ def main():
     wrongMessageRect = wrongMessage.get_rect(center=(675, 400))
    
    
-    tempMessage = theFont.render("Select Your Difficulty (only easy works)", False, "black") #temporary start game message
+    tempMessage = theFont.render("Select Your Difficulty (only easy and normal work)", False, "black") #temporary start game message
     tempMessageRect = tempMessage.get_rect(center=(675, 150))
    
     tempMessageDiffTwo = theFont.render("(1)Easy", False, "black") #temporary difficulty option
     tempMessageRectDiffTwo = tempMessageDiffTwo.get_rect(center=(675, 300))
-
-    questionChoice = randint(1,15)
-    easyQuestions = {1: "3 + 2 = ?", 2: "5 + 6 = ?", 3: "7 + 5 = ?", 4: "14 + 3 = ?", 5: "3 - 1 = ?", 6: "7 - 3 = ?", 7: "12 - 4 = ?", 8: "16 - 0 = ?", 9: "3 x 1 = ?", 10: "4 x 2 = ?", 11: "4 x 4 = ?", 12: "2 x 12 = ?", 13: "4 / 1 = ?", 14: "6 / 2 = ?", 15: "18 / 6 = ?"}
-    easyQuestionAnswers = {1: "5", 2: "11", 3: "12", 4: "17", 5: "2", 6: "4", 7: "8", 8: "16", 9: "3", 10: "8", 11: "16", 12: "24", 13: "4", 14: "3", 15: "3"} #Matches answer to question
     
-    tempMessageEasy = theFont.render(easyQuestions[questionChoice], False, "white") #temporary message
+    Question.createEasy() #Creates an initial easy question
+    tempMessageEasy = theFont.render(Question.questionText, False, "white") #temporary message
     tempMessageRectEasy = tempMessageEasy.get_rect(center=(675, 150))
+    
+    Question.createNormal() #Creates an initial normal question
+    tempMessageNormal = theFont.render(Question.questionText, False, "white") #temporary message
+    tempMessageRectNormal = tempMessageNormal.get_rect(center=(675, 150))
     
     tempMessageTurn = theFont.render("Enemy Turn", False, "white") #temporary message
     tempMessageRectTurn = tempMessageTurn.get_rect(center=(675, 150))
@@ -206,8 +558,8 @@ def main():
     tempMessageDiffThree = theFont.render("(2)Normal", False, "black") #temporary difficulty option
     tempMessageRectDiffThree = tempMessageDiffThree.get_rect(center=(675, 400))
    
-    tempMessageNormal = theFont.render("Normal Mode Selected", False, "white") #temporary message
-    tempMessageRectNormal = tempMessageNormal.get_rect(center=(675, 150))
+    #tempMessageNormal = theFont.render("Normal Mode Selected", False, "white") #temporary message
+    #tempMessageRectNormal = tempMessageNormal.get_rect(center=(675, 150))
    
     tempMessageDiffFour = theFont.render("(3)Hard", False, "black") #temporary difficulty option
     tempMessageRectDiffFour = tempMessageDiffFour.get_rect(center=(675, 500))
@@ -236,6 +588,7 @@ def main():
     pygame.time.set_timer(startUpTimer, 2000)
    
     while True:
+        battleTimer = int(pygame.time.get_ticks() / 100) #Every tenth of a second is tracked
         for event in pygame.event.get():
             if event.type == pygame.QUIT: #this will close the game
                 pygame.quit()
@@ -255,7 +608,7 @@ def main():
                     playerTurn = True
                 
                 if answerMessageRect.collidepoint(event.pos):
-                    if textActive:
+                    if userText != "Input Here":
                         answered = True
                
                 if inputRect.collidepoint(event.pos):
@@ -318,9 +671,14 @@ def main():
                     if event.type == pygame.KEYDOWN and event.key == pygame.K_1 or event.type == pygame.KEYDOWN and event.key == pygame.K_KP_1:
                         diffEasy = True
                         diffSelect = False
+                        weezer = battleTimer
+                        Question.createEasy()
+                        tempMessageEasy = theFont.render(Question.questionText, False, "white") #Replaces the message with new question
                     if event.type == pygame.KEYDOWN and event.key == pygame.K_2 or event.type == pygame.KEYDOWN and event.key == pygame.K_KP_2:
                         diffNormal = True
                         diffSelect = False
+                        Question.createNormal()
+                        tempMessageNormal = theFont.render(Question.questionText, False, "white") #Replaces the message with new question
                     if event.type == pygame.KEYDOWN and event.key == pygame.K_3 or event.type == pygame.KEYDOWN and event.key == pygame.K_KP_3:
                         diffHard = True
                         diffSelect = False
@@ -341,8 +699,9 @@ def main():
             screen.blit(tempMessageDiffThree, tempMessageRectDiffThree)
             screen.blit(tempMessageDiffFour, tempMessageRectDiffFour)
             screen.blit(tempMessageDiffFive, tempMessageRectDiffFive)
+            
             if diffEasy:
-                if win and done:
+                if win and done: #Won
                     screen.fill("gray")
                     screen.blit(tempMessageWin, tempMessageRectWin)
                     
@@ -356,11 +715,11 @@ def main():
                     
                     playerSprite.draw(screen)
                     enemySprite.draw(screen)
+
+                    #Question.createEasy()
+                    #tempMessageEasy = theFont.render(Question.questionText, False, "white") #Replaces the message with new question
                     
-                    questionChoice = randint(1,15) #Chooses another random question from the easy list
-                    tempMessageEasy = theFont.render(easyQuestions[questionChoice], False, "white") #Replaces the message with new question
-                    
-                if win == False and done:
+                if win == False and done: #Lost
                     screen.fill("gray")
                     screen.blit(tempMessageLose, tempMessageRectLose)
                     
@@ -374,12 +733,9 @@ def main():
                     
                     playerSprite.draw(screen)
                     enemySprite.draw(screen)
-                    
-                    questionChoice = randint(1,15) #Chooses another random question from the easy list
-                    tempMessageEasy = theFont.render(easyQuestions[questionChoice], False, "white") #Replaces the message with new question
                 
-                if playerTurn and done == False:
-                    battleTimer = int(pygame.time.get_ticks() / 100)
+                if playerTurn and done == False: #Player turn
+                    
                     screen.fill("gray")
                     screen.blit(tempMessageEasy, tempMessageRectEasy)
                     pygame.draw.rect(screen, "red", answerMessageRect)
@@ -411,11 +767,11 @@ def main():
                     # outside of user's text input
                     inputRect.w = max(100, text_surface.get_width()+10)
                     
-                    if battleTimer - weezer <= 150:
+                    if battleTimer - weezer <= 150: #Damage minimum of 50. Maximum time is 15 seconds
                         alvin = theodre - (battleTimer - weezer)
                 
                     if answered:
-                        if userText == easyQuestionAnswers[questionChoice]:
+                        if userText == str(Question.answer):
                             
                             if alvin < 0:
                                 alvin = 0
@@ -458,7 +814,7 @@ def main():
                             carl = 0
                             weezer = battleTimer
                             
-                elif playerTurn == False and done == False:
+                elif playerTurn == False and done == False: #Enemy turn
                     
                     ash = int(pygame.time.get_ticks() / 100)
                     screen.fill("gray")
@@ -485,31 +841,206 @@ def main():
                         kat = True
                     
                     if kat:
-                        simon = simon - randint(10, 150)
-                        
-                        if simon < 0:
-                            simon = 0
-                            
-                        if simon == 0:
-                            playerHealthRect.update(100, 500, simon, 25)
-                            done = True
-                            kat = False
-                            carl = 0
-                            weezer = 0
-                        
-                        else:
-                            playerHealthRect.update(100, 500, simon, 25)
-                            
+                        if randint(1, 50) == 1:
                             playerTurn = True
                             userText = "Input Here"
-
-                            if(diffEasy):
-                                questionChoice = randint(1,15) #Chooses another random question from the easy list
-                                tempMessageEasy = theFont.render(easyQuestions[questionChoice], False, "white") #Replaces the message with new question
+                            weezer = battleTimer
+                            Question.createEasy()
+                            tempMessageEasy = theFont.render(Question.questionText, False, "white") #Replaces the message with new question
+                                
+                        else:
+                            simon = simon - randint(10, 150)
+                            
+                            if simon < 0:
+                                simon = 0
+                                
+                            if simon == 0:
+                                playerHealthRect.update(100, 500, simon, 25)
+                                done = True
+                                kat = False
+                                carl = 0
+                                weezer = 0
+                            
+                            else:
+                                playerHealthRect.update(100, 500, simon, 25)
+                                
+                                playerTurn = True
+                                userText = "Input Here"
+                                weezer = battleTimer
+                                Question.createEasy()
+                                tempMessageEasy = theFont.render(Question.questionText, False, "white") #Replaces the message with new question
                         
+               
             if diffNormal:
-                screen.fill("black")
-                screen.blit(tempMessageNormal, tempMessageRectNormal)
+                if win and done: #Won
+                    screen.fill("gray")
+                    screen.blit(tempMessageWin, tempMessageRectWin)
+                    
+                    screen.blit(messageBack, messageRectBack)
+                    
+                    pygame.draw.rect(screen, "red", playerDamageRect)
+                    pygame.draw.rect(screen, "green", playerHealthRect)
+                    
+                    pygame.draw.rect(screen, "red", otherDamageRect)
+                    pygame.draw.rect(screen, "green", otherHealthRect)
+                    
+                    playerSprite.draw(screen)
+                    enemySprite.draw(screen)
+
+                    #Question.createEasy()
+                    #tempMessageEasy = theFont.render(Question.questionText, False, "white") #Replaces the message with new question
+                    
+                if win == False and done: #Lost
+                    screen.fill("gray")
+                    screen.blit(tempMessageLose, tempMessageRectLose)
+                    
+                    screen.blit(messageBack, messageRectBack)
+                    
+                    pygame.draw.rect(screen, "red", playerDamageRect)
+                    pygame.draw.rect(screen, "green", playerHealthRect)
+                    
+                    pygame.draw.rect(screen, "red", otherDamageRect)
+                    pygame.draw.rect(screen, "green", otherHealthRect)
+                    
+                    playerSprite.draw(screen)
+                    enemySprite.draw(screen)
+                
+                if playerTurn and done == False: #Player turn
+                    
+                    screen.fill("gray")
+                    screen.blit(tempMessageNormal, tempMessageRectNormal)
+                    pygame.draw.rect(screen, "red", answerMessageRect)
+                    screen.blit(answerMessage, answerMessageRect)
+                    playerSprite.draw(screen)
+                    enemySprite.draw(screen)
+                
+                    if textActive:
+                        color = colorActive
+                    else:
+                        color = colorPassive
+            
+                    # draw rectangle and argument passed which should
+                    # be on screen
+                    pygame.draw.rect(screen, color, inputRect)
+    
+                    text_surface = theFont.render(userText, True, (255, 255, 255))
+        
+                    # render at position stated in arguments
+                    screen.blit(text_surface, (inputRect.x+5, inputRect.y+5))
+                    
+                    pygame.draw.rect(screen, "red", playerDamageRect)
+                    pygame.draw.rect(screen, "green", playerHealthRect)
+                    
+                    pygame.draw.rect(screen, "red", otherDamageRect)
+                    pygame.draw.rect(screen, "green", otherHealthRect)
+        
+                    # set width of textfield so that text cannot get
+                    # outside of user's text input
+                    inputRect.w = max(100, text_surface.get_width()+10)
+                    
+                    if battleTimer - weezer <= 150: #Damage minimum of 50. Maximum time is 15 seconds
+                        alvin = theodre - (battleTimer - weezer)
+                    #print(Question.answer)
+                
+                    if answered:
+                        if userText == str(Question.answer):
+                            
+                            if alvin < 0:
+                                alvin = 0
+                            
+                            michael = michael - alvin
+                            
+                            if michael < 0:
+                                michael = 0
+                                
+                            if michael == 0:
+                                otherHealthRect.update(1000, 175, michael, 25)
+                                win = True
+                                done = True
+                                correct = False
+                                answered = False
+                                textActive = False
+                                playerTurn = False
+                                kat = False
+                                carl = 0
+                                weezer = 0
+                                
+                            else:
+                                otherHealthRect.update(1000, 175, michael, 25)
+                                screen.blit(secretMessage, secretMessageRect)
+                                correct = True
+                                answered = False
+                                textActive = False
+                                playerTurn = False
+                                kat = False
+                                carl = 0
+                                weezer = battleTimer
+
+                        else:
+                            screen.blit(wrongMessage, wrongMessageRect)
+                            correct = False
+                            answered = False
+                            textActive = False
+                            playerTurn = False
+                            kat = False
+                            carl = 0
+                            weezer = battleTimer
+                            
+                elif playerTurn == False and done == False: #Enemy turn
+                    
+                    ash = int(pygame.time.get_ticks() / 100)
+                    screen.fill("gray")
+                    screen.blit(tempMessageTurn, tempMessageRectTurn)
+                    
+                    if correct == False:
+                        screen.blit(wrongMessage, wrongMessageRect)
+                    else:
+                        screen.blit(secretMessage, secretMessageRect)
+                    
+                    pygame.draw.rect(screen, "red", playerDamageRect)
+                    pygame.draw.rect(screen, "green", playerHealthRect)
+                    
+                    pygame.draw.rect(screen, "red", otherDamageRect)
+                    pygame.draw.rect(screen, "green", otherHealthRect)
+                    
+                    playerSprite.draw(screen)
+                    enemySprite.draw(screen)
+                    
+                    if ash % 2 == 0:
+                        carl += 1
+                        
+                    if carl == 10:
+                        kat = True
+                    
+                    if kat:
+                        if randint(1, 50) == 1:
+                            playerTurn = True
+                            userText = "Input Here"
+                            weezer = battleTimer
+                            Question.createNormal()
+                            tempMessageNormal = theFont.render(Question.questionText, False, "white") #Replaces the message with new question
+                                
+                        else:
+                            simon = simon - randint(10, 150)
+                            
+                            if simon < 0:
+                                simon = 0
+                                
+                            if simon == 0:
+                                playerHealthRect.update(100, 500, simon, 25)
+                                done = True
+                                kat = False
+                                carl = 0
+                                weezer = 0
+                            
+                            else:
+                                playerHealthRect.update(100, 500, simon, 25)
+                                
+                                playerTurn = True
+                                userText = "Input Here"
+                                weezer = battleTimer
+                                Question.createNormal()
+                                tempMessageNormal = theFont.render(Question.questionText, False, "white") #Replaces the message with new question
             if diffHard:
                 screen.fill("black")
                 screen.blit(tempMessageHard, tempMessageRectHard)

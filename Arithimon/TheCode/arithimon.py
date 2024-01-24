@@ -622,6 +622,10 @@ def main():
                     mixer.music.load('Items/menuMusic.wav')
                     mixer.music.set_volume(0.1)
                     mixer.music.play(-1)
+                    pygame.sprite.Group.empty(playerSprite)
+                    pygame.sprite.Group.empty(enemySprite)
+                    beavis = 0
+                    butthead = 0
                 
                 if answerMessageRect.collidepoint(event.pos) and playerTurn:
                     if userText != "Input Here":

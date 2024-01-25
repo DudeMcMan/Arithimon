@@ -40,8 +40,8 @@ class battleScreen(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
        
-        battleScreen1 = pygame.image.load("Items/battleScreen1.png").convert_alpha()
-        battleScreen1 = pygame.transform.scale_by(battleScreen1, (1/2, 1/2))
+        battleScreen1 = pygame.image.load("Items/Hintergrund.png").convert_alpha()
+        #battleScreen1 = pygame.transform.scale_by(battleScreen1, (1/2, 1/2))
        
         self.image = battleScreen1
         self.rect = self.image.get_rect(center=(675, 400))
@@ -515,6 +515,10 @@ def main():
     title = pygame.sprite.Group()#the title
     title.add(theABCD())
     
+    background = pygame.sprite.GroupSingle()
+    background.add(battleScreen())
+
+    
     playerSprite = pygame.sprite.Group()
     #playerSprite.add(playerBarry())
     
@@ -560,7 +564,7 @@ def main():
     tempMessageRectLose = tempMessageLose.get_rect(center=(675, 150))
     
     messageBack = theFont.render("Return to Difficulty Selection", False, "white") #temporary message
-    messageRectBack = messageBack.get_rect(center=(675, 500))
+    messageRectBack = messageBack.get_rect(center=(675, 600))
    
     tempMessageDiffThree = theFont.render("(2)Normal", False, "black") #temporary difficulty option
     tempMessageRectDiffThree = tempMessageDiffThree.get_rect(center=(675, 400))
@@ -744,7 +748,8 @@ def main():
             
             if diffEasy:
                 if win and done: #Won
-                    screen.fill("gray")
+                    #screen.fill("gray")
+                    background.draw(screen)
                     screen.blit(tempMessageWin, tempMessageRectWin)
                     
                     screen.blit(messageBack, messageRectBack)
@@ -763,7 +768,8 @@ def main():
                     
                 if win == False and done: #Lost
                     mixer.music.stop()
-                    screen.fill("gray")
+                    #screen.fill("gray")
+                    background.draw(screen)
                     screen.blit(tempMessageLose, tempMessageRectLose)
                     
                     screen.blit(messageBack, messageRectBack)
@@ -779,7 +785,8 @@ def main():
                 
                 if playerTurn and done == False: #Player turn
                     
-                    screen.fill("gray")
+                    #screen.fill("gray")
+                    background.draw(screen)
                     screen.blit(tempMessageEasy, tempMessageRectEasy)
                     pygame.draw.rect(screen, "red", answerMessageRect)
                     screen.blit(answerMessage, answerMessageRect)
@@ -864,7 +871,8 @@ def main():
                 elif playerTurn == False and done == False: #Enemy turn
                     
                     ash = int(pygame.time.get_ticks() / 100)
-                    screen.fill("gray")
+                    #screen.fill("gray")
+                    background.draw(screen)
                     screen.blit(tempMessageTurn, tempMessageRectTurn)
                     
                     if correct == False:
@@ -920,7 +928,8 @@ def main():
                
             if diffNormal:
                 if win and done: #Won
-                    screen.fill("gray")
+                    #screen.fill("gray")
+                    background.draw(screen)
                     screen.blit(tempMessageWin, tempMessageRectWin)
                     
                     screen.blit(messageBack, messageRectBack)
@@ -939,7 +948,8 @@ def main():
                     
                 if win == False and done: #Lost
                     mixer.music.stop()
-                    screen.fill("gray")
+                    #screen.fill("gray")
+                    background.draw(screen)
                     screen.blit(tempMessageLose, tempMessageRectLose)
                     
                     screen.blit(messageBack, messageRectBack)
@@ -955,7 +965,8 @@ def main():
                 
                 if playerTurn and done == False: #Player turn
                     
-                    screen.fill("gray")
+                    #screen.fill("gray")
+                    background.draw(screen)
                     screen.blit(tempMessageNormal, tempMessageRectNormal)
                     pygame.draw.rect(screen, "red", answerMessageRect)
                     screen.blit(answerMessage, answerMessageRect)
@@ -1040,7 +1051,8 @@ def main():
                 elif playerTurn == False and done == False: #Enemy turn
                     
                     ash = int(pygame.time.get_ticks() / 100)
-                    screen.fill("gray")
+                    #screen.fill("gray")
+                    background.draw(screen)
                     screen.blit(tempMessageTurn, tempMessageRectTurn)
                     
                     if correct == False:

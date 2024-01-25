@@ -476,7 +476,7 @@ def main():
     
     clickSound = pygame.mixer.Sound("Items/zipclick.wav") #Adds the click sound effect
     
-    jeremy = 0 # this is for the start up screen, so it can changeS
+    jeremy = 0 # this is for the start up screen, so it can change
     michael = 200 # to make te health bar go down
     battleTimer = 0 #deducts from base
     alvin = 0 #damage deduction
@@ -606,7 +606,7 @@ def main():
                 pygame.quit()
                 exit()
                
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
                 
                 if messageRectBack.collidepoint(event.pos) and done:
                     diffSelect = True
@@ -626,9 +626,10 @@ def main():
                     pygame.sprite.Group.empty(enemySprite)
                     beavis = 0
                     butthead = 0
+                    break #So that clicking this does not immediately select hard mode
                 
                 if answerMessageRect.collidepoint(event.pos) and playerTurn:
-                    if userText != "Input Here":
+                    if userText != "Input Here" and userText != "":
                         answered = True
                
                 if inputRect.collidepoint(event.pos) and playerTurn:
@@ -688,7 +689,7 @@ def main():
                     elif butthead == 3:
                         enemySprite.add(enemyRuley())
                     
-                    if event.type == pygame.KEYDOWN and event.key == pygame.K_1 or event.type == pygame.KEYDOWN and event.key == pygame.K_KP_1 or event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and tempMessageRectDiffTwo.collidepoint(event.pos):
+                    if event.type == pygame.KEYDOWN and event.key == pygame.K_1 or event.type == pygame.KEYDOWN and event.key == pygame.K_KP_1 or event.type == pygame.MOUSEBUTTONUP and event.button == 1 and tempMessageRectDiffTwo.collidepoint(event.pos):
                         clickSound.play()
                         diffEasy = True
                         diffSelect = False
@@ -699,7 +700,7 @@ def main():
                         mixer.music.load('Items/battleMusic.wav')
                         mixer.music.set_volume(0.2)
                         mixer.music.play(-1)
-                    if event.type == pygame.KEYDOWN and event.key == pygame.K_2 or event.type == pygame.KEYDOWN and event.key == pygame.K_KP_2 or event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and tempMessageRectDiffThree.collidepoint(event.pos):
+                    if event.type == pygame.KEYDOWN and event.key == pygame.K_2 or event.type == pygame.KEYDOWN and event.key == pygame.K_KP_2 or event.type == pygame.MOUSEBUTTONUP and event.button == 1 and tempMessageRectDiffThree.collidepoint(event.pos):
                         clickSound.play()
                         diffNormal = True
                         diffSelect = False
@@ -709,7 +710,7 @@ def main():
                         mixer.music.load('Items/battleMusic.wav')
                         mixer.music.set_volume(0.2)
                         mixer.music.play(-1)
-                    if event.type == pygame.KEYDOWN and event.key == pygame.K_3 or event.type == pygame.KEYDOWN and event.key == pygame.K_KP_3:
+                    if event.type == pygame.KEYDOWN and event.key == pygame.K_3 or event.type == pygame.KEYDOWN and event.key == pygame.K_KP_3 or event.type == pygame.MOUSEBUTTONUP and event.button == 1 and tempMessageRectDiffFour.collidepoint(event.pos):
                         clickSound.play()
                         diffHard = True
                         diffSelect = False
@@ -717,7 +718,7 @@ def main():
                         mixer.music.load('Items/battleMusic.wav')
                         mixer.music.set_volume(0.2)
                         mixer.music.play(-1)
-                    if event.type == pygame.KEYDOWN and event.key == pygame.K_4 or event.type == pygame.KEYDOWN and event.key == pygame.K_KP_4:
+                    if event.type == pygame.KEYDOWN and event.key == pygame.K_4 or event.type == pygame.KEYDOWN and event.key == pygame.K_KP_4 or event.type == pygame.MOUSEBUTTONUP and event.button == 1 and tempMessageRectDiffFive.collidepoint(event.pos):
                         clickSound.play()
                         diffExtreme = True
                         diffSelect = False
@@ -1093,10 +1094,14 @@ def main():
                                 tempMessageNormal = theFont.render(Question.questionText, False, "white") #Replaces the message with new question
             if diffHard:
                 screen.fill("black")
+                done = True
                 screen.blit(tempMessageHard, tempMessageRectHard)
+                screen.blit(messageBack, messageRectBack)
             if diffExtreme:
                 screen.fill("black")
+                done = True
                 screen.blit(tempMessageExtreme, tempMessageRectExtreme)
+                screen.blit(messageBack, messageRectBack)
        
         else:
             title.draw(screen)

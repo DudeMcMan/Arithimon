@@ -469,7 +469,7 @@ def main():
    
     clock = pygame.time.Clock() #needed for frame rate
    
-    jeremy = 0 # this is for the start up screen, so it can changeS
+    jeremy = 0 # this is for the start up screen, so it can change
     michael = 200 # to make te health bar go down
     battleTimer = 0 #deducts from base
     alvin = 0 #damage deduction
@@ -607,8 +607,9 @@ def main():
                     diffNormal = False
                     diffHard = False
                     diffExtreme = False
-                    answered = False
                     playerTurn = True
+                    answered = False
+                    userText = "Input Here"
                 
                 if answerMessageRect.collidepoint(event.pos):
                     if userText != "Input Here":
@@ -637,8 +638,7 @@ def main():
                         pass
                         #prevents enter from being typed
  
-                    # Unicode standard is used for string
-                    # formation
+                    # Unicode standard is used for string formation
                     else:
                         userText += event.unicode
            
@@ -709,6 +709,7 @@ def main():
                     background.draw(screen)
                     screen.blit(tempMessageWin, tempMessageRectWin)
                     
+                    pygame.draw.rect(screen, "red", messageRectBack)
                     screen.blit(messageBack, messageRectBack)
                     
                     pygame.draw.rect(screen, "red", playerDamageRect)
@@ -728,6 +729,7 @@ def main():
                     background.draw(screen)
                     screen.blit(tempMessageLose, tempMessageRectLose)
                     
+                    pygame.draw.rect(screen, "red", messageRectBack)
                     screen.blit(messageBack, messageRectBack)
                     
                     pygame.draw.rect(screen, "red", playerDamageRect)
@@ -791,7 +793,7 @@ def main():
                                 otherHealthRect.update(1000, 175, michael, 25)
                                 win = True
                                 done = True
-                                correct = False
+                                correct = True
                                 answered = False
                                 textActive = False
                                 playerTurn = False
@@ -883,6 +885,7 @@ def main():
                     background.draw(screen)
                     screen.blit(tempMessageWin, tempMessageRectWin)
                     
+                    pygame.draw.rect(screen, "red", messageRectBack)
                     screen.blit(messageBack, messageRectBack)
                     
                     pygame.draw.rect(screen, "red", playerDamageRect)
@@ -902,6 +905,7 @@ def main():
                     background.draw(screen)
                     screen.blit(tempMessageLose, tempMessageRectLose)
                     
+                    pygame.draw.rect(screen, "red", messageRectBack)
                     screen.blit(messageBack, messageRectBack)
                     
                     pygame.draw.rect(screen, "red", playerDamageRect)

@@ -271,10 +271,16 @@ class Question:
                     fourthInt = firstInt - secondInt
                     Question.answer = int(fourthInt / thirdInt)
                 if order == 4:
+                    while(secondInt - thirdInt == 0):
+                        secondInt = randint(0,12)
+                        thirdInt = randint(0, 12)
                     while(firstInt % (secondInt - thirdInt)!=0):
                         firstInt = randint(0,12)
                         secondInt = randint(0,12)
-                        thirdInt = randint(1, 12)
+                        thirdInt = randint(0, 12)
+                        while(secondInt - thirdInt == 0):
+                            secondInt = randint(0,12)
+                            thirdInt = randint(0, 12)
                     Question.questionText = str(firstInt)+" / ("+str(secondInt)+" - " + str(thirdInt) + ") = ?"
                     fourthInt = secondInt - thirdInt
                     Question.answer = int(firstInt / fourthInt)
@@ -333,6 +339,8 @@ class Question:
                     fourthInt = firstInt * secondInt
                     Question.answer = int(fourthInt / thirdInt)
                 if order == 4:
+                    while thirdInt == 0:
+                        thirdInt = randint(1, 12)
                     while(firstInt % (secondInt * thirdInt)!=0):
                         firstInt = randint(0,12)
                         secondInt = randint(1,12)
@@ -344,16 +352,16 @@ class Question:
         else:
             #/
             firstInt = randint(0,12)
-            secondInt = randint(1,12)
-            thirdInt = randint(1, 12)
+            secondInt = randint(0,12)
+            thirdInt = randint(0, 12)
             fourthInt = 0
             #Question.questionText = str(firstInt)+" + "+str(secondInt)+" = ?"
             #Question.answer = firstInt+secondInt
             if other == 1:
                 #-
-                while thirdInt == 0:
-                    thirdInt = randint(1, 12)
                 if order == 1:
+                    while thirdInt == 0:
+                        thirdInt = randint(1, 12)
                     while(secondInt % thirdInt!=0):
                         firstInt = randint(0,12)
                         secondInt = randint(0,12)
@@ -362,14 +370,18 @@ class Question:
                     fourthInt = secondInt / thirdInt
                     Question.answer = int(firstInt - fourthInt)
                 if order == 2:
+                    while secondInt == 0:
+                        secondInt = randint(1, 12)
                     while(firstInt % secondInt!=0):
                         firstInt = randint(0,12)
-                        secondInt = randint(0,12)
+                        secondInt = randint(1,12)
                         thirdInt = randint(0, 12)
                     Question.questionText = "(" + str(firstInt)+" / "+str(secondInt)+") - " + str(thirdInt) + " = ?"
                     fourthInt = firstInt / secondInt
                     Question.answer = int(fourthInt - thirdInt)
                 if order == 3:
+                    while thirdInt == 0:
+                        thirdInt = randint(1, 12)
                     while((firstInt - secondInt) % thirdInt!=0):
                         firstInt = randint(0,12)
                         secondInt = randint(0,12)
@@ -378,13 +390,13 @@ class Question:
                     fourthInt = firstInt - secondInt
                     Question.answer = int(fourthInt / thirdInt)
                 if order == 4:
-                    while(thirdInt == secondInt): #To make sure the number in the parenthesis isn't equal to 0
+                    while(secondInt - thirdInt != 0): #To make sure the number in the parenthesis isn't equal to 0
                         thirdInt = randint(0, 12)
                     while(firstInt % (secondInt - thirdInt)!=0):
                         firstInt = randint(0,12)
                         secondInt = randint(0,12)
                         thirdInt = randint(0, 12)
-                        while(thirdInt == secondInt):
+                        while(secondInt - thirdInt != 0):
                             thirdInt = randint(0, 12)
                     Question.questionText = str(firstInt)+" / ("+str(secondInt)+" - " + str(thirdInt) + ") = ?"
                     fourthInt = secondInt - thirdInt
@@ -403,6 +415,8 @@ class Question:
                     fourthInt = secondInt / thirdInt
                     Question.answer = int(firstInt * fourthInt)
                 if order == 2:
+                    while secondInt == 0:
+                        secondInt = randint(1, 12)
                     while(firstInt % secondInt!=0):
                         firstInt = randint(0,12)
                         secondInt = randint(1,12)
@@ -419,6 +433,9 @@ class Question:
                     fourthInt = firstInt * secondInt
                     Question.answer = int(fourthInt / thirdInt)
                 if order == 4:
+                    while thirdInt == 0 or secondInt == 0:
+                        secondInt = randint(1, 12)
+                        thirdInt = randint(1, 12)
                     while(firstInt % (secondInt * thirdInt)!=0):
                         firstInt = randint(0,12)
                         secondInt = randint(1,12)
@@ -440,6 +457,8 @@ class Question:
                     fourthInt = secondInt / thirdInt
                     Question.answer = int(firstInt + fourthInt)
                 if order == 2:
+                    while secondInt == 0:
+                        secondInt = randint(1, 12)
                     while(firstInt % secondInt!=0):
                         firstInt = randint(0,12)
                         secondInt = randint(1,12)
@@ -620,8 +639,9 @@ def main():
                     diffNormal = False
                     diffHard = False
                     diffExtreme = False
-                    answered = False
                     playerTurn = True
+                    answered = False
+                    userText = "Input Here"
                     clickSound.play()
                     mixer.music.load('Items/menuMusic.wav')
                     mixer.music.set_volume(0.1)
@@ -659,8 +679,7 @@ def main():
                         pass
                         #prevents enter from being typed
  
-                    # Unicode standard is used for string
-                    # formation
+                    # Unicode standard is used for string formation
                     else:
                         userText += event.unicode
            
@@ -752,6 +771,7 @@ def main():
                     background.draw(screen)
                     screen.blit(tempMessageWin, tempMessageRectWin)
                     
+                    pygame.draw.rect(screen, "red", messageRectBack)
                     screen.blit(messageBack, messageRectBack)
                     
                     pygame.draw.rect(screen, "red", playerDamageRect)
@@ -772,6 +792,7 @@ def main():
                     background.draw(screen)
                     screen.blit(tempMessageLose, tempMessageRectLose)
                     
+                    pygame.draw.rect(screen, "red", messageRectBack)
                     screen.blit(messageBack, messageRectBack)
                     
                     pygame.draw.rect(screen, "red", playerDamageRect)
@@ -835,7 +856,7 @@ def main():
                                 otherHealthRect.update(1000, 175, michael, 25)
                                 win = True
                                 done = True
-                                correct = False
+                                correct = True
                                 answered = False
                                 textActive = False
                                 playerTurn = False
@@ -932,6 +953,7 @@ def main():
                     background.draw(screen)
                     screen.blit(tempMessageWin, tempMessageRectWin)
                     
+                    pygame.draw.rect(screen, "red", messageRectBack)
                     screen.blit(messageBack, messageRectBack)
                     
                     pygame.draw.rect(screen, "red", playerDamageRect)
@@ -952,6 +974,7 @@ def main():
                     background.draw(screen)
                     screen.blit(tempMessageLose, tempMessageRectLose)
                     
+                    pygame.draw.rect(screen, "red", messageRectBack)
                     screen.blit(messageBack, messageRectBack)
                     
                     pygame.draw.rect(screen, "red", playerDamageRect)

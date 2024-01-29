@@ -510,7 +510,16 @@ def main():
     weezer = 0 #to help with damage calc
     win = False #tells if the player has won
     done = False #tells if the match is over
-   
+    gameActive = False
+    diffSelect = False
+    diffEasy = False
+    diffNormal = False
+    diffHard = False
+    diffExtreme = False
+    answered = False
+    playerTurn = True
+    textActive = False
+    
     userText = "Input Here"
  
     # text rect
@@ -529,8 +538,6 @@ def main():
     colorPassive = pygame.Color('chartreuse4')
     color = colorPassive
  
-    textActive = False
-   
     title = pygame.sprite.Group()#the title
     title.add(theABCD())
     
@@ -565,13 +572,8 @@ def main():
     tempMessageDiffTwo = theFont.render("(1)Easy", False, "black") #temporary difficulty option
     tempMessageRectDiffTwo = tempMessageDiffTwo.get_rect(center=(675, 300))
     
-    Question.createEasy() #Creates an initial easy question
-    tempMessageEasy = theFont.render(Question.questionText, False, "white") #temporary message
-    tempMessageRectEasy = tempMessageEasy.get_rect(center=(675, 150))
-    
-    Question.createNormal() #Creates an initial normal question
-    tempMessageNormal = theFont.render(Question.questionText, False, "white") #temporary message
-    tempMessageRectNormal = tempMessageNormal.get_rect(center=(675, 150))
+    questionMessage = theFont.render("Placeholder", False, "white") #Message used for displaying the question
+    questionMessageRect = questionMessage.get_rect(center=(675, 150))
     
     tempMessageTurn = theFont.render("Enemy Turn", False, "white") #temporary message
     tempMessageRectTurn = tempMessageTurn.get_rect(center=(675, 150))
@@ -602,16 +604,6 @@ def main():
    
     tempMessageExtreme = theFont.render("Extreme Mode Selected", False, "white") #temporary message
     tempMessageRectExtreme = tempMessageExtreme.get_rect(center=(675, 150))
-   
-   
-    gameActive = False
-    diffSelect = False
-    diffEasy = False
-    diffNormal = False
-    diffHard = False
-    diffExtreme = False
-    answered = False
-    playerTurn = True
    
     #timers
     startUpTimer = pygame.USEREVENT + 1
@@ -718,7 +710,7 @@ def main():
                         diffSelect = False
                         weezer = battleTimer
                         Question.createEasy()
-                        tempMessageEasy = theFont.render(Question.questionText, False, "white") #Replaces the message with new question
+                        questionMessage = theFont.render(Question.questionText, False, "white") #Replaces the message with new question
                         mixer.music.stop()
                         mixer.music.load('Items/battleMusic.wav')
                         mixer.music.set_volume(0.2)
@@ -728,7 +720,7 @@ def main():
                         diffNormal = True
                         diffSelect = False
                         Question.createNormal()
-                        tempMessageNormal = theFont.render(Question.questionText, False, "white") #Replaces the message with new question
+                        questionMessage = theFont.render(Question.questionText, False, "white") #Replaces the message with new question
                         mixer.music.stop()
                         mixer.music.load('Items/battleMusic.wav')
                         mixer.music.set_volume(0.2)
@@ -765,7 +757,7 @@ def main():
             screen.blit(tempMessageDiffFour, tempMessageRectDiffFour)
             screen.blit(tempMessageDiffFive, tempMessageRectDiffFive)
             
-            if diffEasy:
+            if not diffSelect and not diffHard and not diffExtreme:
                 if win and done: #Won
                     #screen.fill("gray")
                     background.draw(screen)
@@ -808,7 +800,7 @@ def main():
                     
                     #screen.fill("gray")
                     background.draw(screen)
-                    screen.blit(tempMessageEasy, tempMessageRectEasy)
+                    screen.blit(questionMessage, questionMessageRect)
                     pygame.draw.rect(screen, "red", answerMessageRect)
                     screen.blit(answerMessage, answerMessageRect)
                     playerSprite.draw(screen)
@@ -819,8 +811,7 @@ def main():
                     else:
                         color = colorPassive
             
-                    # draw rectangle and argument passed which should
-                    # be on screen
+                    # draw rectangle and argument passed which should be on screen
                     pygame.draw.rect(screen, color, inputRect)
     
                     text_surface = theFont.render(userText, True, (255, 255, 255))
@@ -834,8 +825,7 @@ def main():
                     pygame.draw.rect(screen, "red", otherDamageRect)
                     pygame.draw.rect(screen, "green", otherHealthRect)
         
-                    # set width of textfield so that text cannot get
-                    # outside of user's text input
+                    # set width of textfield so that text cannot get outside of user's text input
                     inputRect.w = max(100, text_surface.get_width()+10)
                     
                     if battleTimer - weezer <= 150: #Damage minimum of 50. Maximum time is 15 seconds
@@ -852,7 +842,7 @@ def main():
                             if michael < 0:
                                 michael = 0
                                 
-                            if michael == 0:
+                            if michael == 0: #Enemy health at 0, player win
                                 otherHealthRect.update(1000, 175, michael, 25)
                                 win = True
                                 done = True
@@ -868,7 +858,7 @@ def main():
                                 mixer.music.set_volume(0.2)
                                 mixer.music.play(-1)
                                 
-                            else:
+                            else: #Enemy health not yet 0, go to computer turn
                                 otherHealthRect.update(1000, 175, michael, 25)
                                 screen.blit(secretMessage, secretMessageRect)
                                 correct = True
@@ -879,7 +869,7 @@ def main():
                                 carl = 0
                                 weezer = battleTimer
 
-                        else:
+                        else: #Wrong, go to computer turn
                             screen.blit(wrongMessage, wrongMessageRect)
                             correct = False
                             answered = False
@@ -917,194 +907,16 @@ def main():
                         kat = True
                     
                     if kat:
-                        if randint(1, 50) == 1:
+                        if randint(1, 50) == 1: #1 in 50 chance to not hit
                             playerTurn = True
                             userText = "Input Here"
                             weezer = battleTimer
-                            Question.createEasy()
-                            tempMessageEasy = theFont.render(Question.questionText, False, "white") #Replaces the message with new question
-                                
-                        else:
-                            simon = simon - randint(10, 150)
-                            
-                            if simon < 0:
-                                simon = 0
-                                
-                            if simon == 0:
-                                playerHealthRect.update(100, 500, simon, 25)
-                                done = True
-                                kat = False
-                                carl = 0
-                                weezer = 0
-                            
-                            else:
-                                playerHealthRect.update(100, 500, simon, 25)
-                                
-                                playerTurn = True
-                                userText = "Input Here"
-                                weezer = battleTimer
+                            if diffEasy:    
                                 Question.createEasy()
-                                tempMessageEasy = theFont.render(Question.questionText, False, "white") #Replaces the message with new question
-                        
-               
-            if diffNormal:
-                if win and done: #Won
-                    #screen.fill("gray")
-                    background.draw(screen)
-                    screen.blit(tempMessageWin, tempMessageRectWin)
-                    
-                    pygame.draw.rect(screen, "red", messageRectBack)
-                    screen.blit(messageBack, messageRectBack)
-                    
-                    pygame.draw.rect(screen, "red", playerDamageRect)
-                    pygame.draw.rect(screen, "green", playerHealthRect)
-                    
-                    pygame.draw.rect(screen, "red", otherDamageRect)
-                    pygame.draw.rect(screen, "green", otherHealthRect)
-                    
-                    playerSprite.draw(screen)
-                    enemySprite.draw(screen)
-
-                    #Question.createEasy()
-                    #tempMessageEasy = theFont.render(Question.questionText, False, "white") #Replaces the message with new question
-                    
-                if win == False and done: #Lost
-                    mixer.music.stop()
-                    #screen.fill("gray")
-                    background.draw(screen)
-                    screen.blit(tempMessageLose, tempMessageRectLose)
-                    
-                    pygame.draw.rect(screen, "red", messageRectBack)
-                    screen.blit(messageBack, messageRectBack)
-                    
-                    pygame.draw.rect(screen, "red", playerDamageRect)
-                    pygame.draw.rect(screen, "green", playerHealthRect)
-                    
-                    pygame.draw.rect(screen, "red", otherDamageRect)
-                    pygame.draw.rect(screen, "green", otherHealthRect)
-                    
-                    playerSprite.draw(screen)
-                    enemySprite.draw(screen)
-                
-                if playerTurn and done == False: #Player turn
-                    
-                    #screen.fill("gray")
-                    background.draw(screen)
-                    screen.blit(tempMessageNormal, tempMessageRectNormal)
-                    pygame.draw.rect(screen, "red", answerMessageRect)
-                    screen.blit(answerMessage, answerMessageRect)
-                    playerSprite.draw(screen)
-                    enemySprite.draw(screen)
-                
-                    if textActive:
-                        color = colorActive
-                    else:
-                        color = colorPassive
-            
-                    # draw rectangle and argument passed which should
-                    # be on screen
-                    pygame.draw.rect(screen, color, inputRect)
-    
-                    text_surface = theFont.render(userText, True, (255, 255, 255))
-        
-                    # render at position stated in arguments
-                    screen.blit(text_surface, (inputRect.x+5, inputRect.y+5))
-                    
-                    pygame.draw.rect(screen, "red", playerDamageRect)
-                    pygame.draw.rect(screen, "green", playerHealthRect)
-                    
-                    pygame.draw.rect(screen, "red", otherDamageRect)
-                    pygame.draw.rect(screen, "green", otherHealthRect)
-        
-                    # set width of textfield so that text cannot get
-                    # outside of user's text input
-                    inputRect.w = max(100, text_surface.get_width()+10)
-                    
-                    if battleTimer - weezer <= 150: #Damage minimum of 50. Maximum time is 15 seconds
-                        alvin = theodre - (battleTimer - weezer)
-                    #print(Question.answer)
-                
-                    if answered:
-                        if userText == str(Question.answer):
-                            
-                            if alvin < 0:
-                                alvin = 0
-                            
-                            michael = michael - alvin
-                            
-                            if michael < 0:
-                                michael = 0
-                                
-                            if michael == 0:
-                                otherHealthRect.update(1000, 175, michael, 25)
-                                win = True
-                                done = True
-                                correct = False
-                                answered = False
-                                textActive = False
-                                playerTurn = False
-                                kat = False
-                                carl = 0
-                                weezer = 0
-                                mixer.music.stop()
-                                mixer.music.load('Items/victoryMusic.wav')
-                                mixer.music.set_volume(0.2)
-                                mixer.music.play(-1)
-                            else:
-                                otherHealthRect.update(1000, 175, michael, 25)
-                                screen.blit(secretMessage, secretMessageRect)
-                                correct = True
-                                answered = False
-                                textActive = False
-                                playerTurn = False
-                                kat = False
-                                carl = 0
-                                weezer = battleTimer
-
-                        else:
-                            screen.blit(wrongMessage, wrongMessageRect)
-                            correct = False
-                            answered = False
-                            textActive = False
-                            playerTurn = False
-                            kat = False
-                            carl = 0
-                            weezer = battleTimer
-                            
-                elif playerTurn == False and done == False: #Enemy turn
-                    
-                    ash = int(pygame.time.get_ticks() / 100)
-                    #screen.fill("gray")
-                    background.draw(screen)
-                    screen.blit(tempMessageTurn, tempMessageRectTurn)
-                    
-                    if correct == False:
-                        screen.blit(wrongMessage, wrongMessageRect)
-                    else:
-                        screen.blit(secretMessage, secretMessageRect)
-                    
-                    pygame.draw.rect(screen, "red", playerDamageRect)
-                    pygame.draw.rect(screen, "green", playerHealthRect)
-                    
-                    pygame.draw.rect(screen, "red", otherDamageRect)
-                    pygame.draw.rect(screen, "green", otherHealthRect)
-                    
-                    playerSprite.draw(screen)
-                    enemySprite.draw(screen)
-                    
-                    if ash % 2 == 0:
-                        carl += 1
-                        
-                    if carl == 10:
-                        kat = True
-                    
-                    if kat:
-                        if randint(1, 50) == 1:
-                            playerTurn = True
-                            userText = "Input Here"
-                            weezer = battleTimer
-                            Question.createNormal()
-                            tempMessageNormal = theFont.render(Question.questionText, False, "white") #Replaces the message with new question
+                                questionMessage = theFont.render(Question.questionText, False, "white") #Replaces the message with new question
+                            elif diffNormal:
+                                Question.createNormal()
+                                questionMessage = theFont.render(Question.questionText, False, "white")
                                 
                         else:
                             simon = simon - randint(10, 150)
@@ -1112,21 +924,27 @@ def main():
                             if simon < 0:
                                 simon = 0
                                 
-                            if simon == 0:
+                            if simon == 0: #Player health at 0, computer win
                                 playerHealthRect.update(100, 500, simon, 25)
                                 done = True
                                 kat = False
                                 carl = 0
                                 weezer = 0
                             
-                            else:
+                            else: #Player health not yet 0, go to player turn
                                 playerHealthRect.update(100, 500, simon, 25)
                                 
                                 playerTurn = True
                                 userText = "Input Here"
                                 weezer = battleTimer
-                                Question.createNormal()
-                                tempMessageNormal = theFont.render(Question.questionText, False, "white") #Replaces the message with new question
+                                if diffEasy:    
+                                    Question.createEasy()
+                                    questionMessage = theFont.render(Question.questionText, False, "white") #Replaces the message with new question
+                                elif diffNormal:
+                                    Question.createNormal()
+                                    questionMessage = theFont.render(Question.questionText, False, "white")
+            
+            #Temporary, until we have hard and extreme implemented
             if diffHard:
                 screen.fill("black")
                 done = True
@@ -1150,8 +968,6 @@ def main():
        
         pygame.display.update() #updates game
         clock.tick(30) #the frame rate
-
-
 
 
 if __name__ == "__main__":

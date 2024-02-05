@@ -113,6 +113,7 @@ class Question:
     questionText = ""
     answer = 0
     def createEasy():
+        Question.questionText = ""
         temp = randint(1,4)
         # temp = 2
         if(temp==1):
@@ -150,339 +151,149 @@ class Question:
             Question.answer = (int)(firstInt/secondInt)
             
     def createNormal():
-        temp = randint(1,4)
-        other = randint(1, 3)
-        order = randint(1, 4)
-        #temp = 1
-        if(temp==1):
-            #+
-            firstInt = randint(0,12)
-            secondInt = randint(1,12)
-            thirdInt = randint(1, 12)
-            fourthInt = 0
-            #Question.questionText = str(firstInt)+" + "+str(secondInt)+" = ?"
-            #Question.answer = firstInt+secondInt
-            if other == 1:
-                #-
-                if order % 2 == 0:
-                    Question.questionText = str(firstInt)+" + "+str(secondInt)+" - " + str(thirdInt) + " = ?"
-                    Question.answer = firstInt + secondInt - thirdInt
-                else:
-                    Question.questionText = str(firstInt)+" - "+str(secondInt)+" + " + str(thirdInt) + " = ?"
-                    Question.answer = firstInt - secondInt + thirdInt
+        Question.questionText = ""
+        while(True):
+            try:
+                firstInt = randint(0, 12)
+                secondInt = randint(0, 12)
+                thirdInt = randint(0, 12)
+                operation1 = randint(1,4)
+                operation2 = randint(1,4)
+                operations = {1: " + ", 2: " - ", 3: " * ", 4: " / "}
+                
+                parenthesis = randint(0, 1)
+                if parenthesis:
+                    #If there will be parenthesis in the equation
+                    parenthesisNum = 0
+                    parenthesisText = ""
+                    parenthesis = randint(0, 1)
+                    if parenthesis:
+                        #Parenthesis location (firstInt and secondInt) or (secondInt and thirdInt)
+                        if operation2 == 4:
+                            if thirdInt == 0: 
+                                thirdInt = randint(1,12)
+                            if operation1 == 4 and secondInt == 0: 
+                                secondInt = randint(1, 12)
+                            while(secondInt % thirdInt != 0): 
+                                secondInt = randint(0, 12)
+                                thirdInt = randint(1, 12)
+                        parenthesisText = "(" + str(secondInt) + operations[operation2] + str(thirdInt) + ")"
+                        parenthesisNum = eval(parenthesisText)
+                        
+                        if operation1 == 4:
+                            while parenthesisNum == 0:
+                                secondInt = randint(0, 12)
+                                if operation2 == 4:
+                                    thirdInt = randint(1, 12)
+                                else: 
+                                    thirdInt = randint(0, 12)
+                                parenthesisText = "(" + str(secondInt) + operations[operation2] + str(thirdInt) + ")"
+                                parenthesisNum = eval(parenthesisText)
+                            
+                            while firstInt % parenthesisNum != 0:
+                                firstInt = randint(0, 12)
+                                secondInt = randint(0, 12)
+                                thirdInt = randint(0, 12)
+                                if operation2 == 3 or operation2 == 4:
+                                    if secondInt == 0: secondInt = randint(1, 12)
+                                    if thirdInt == 0: thirdInt = randint(1,12)
+                                    if operation2 == 4:
+                                        while(secondInt % thirdInt != 0): 
+                                            secondInt = randint(1, 12)
+                                            thirdInt = randint(1, 12)
+                                else:
+                                    while eval(str(secondInt) + operations[operation2] + str(thirdInt)) == 0:
+                                        secondInt = randint(0, 12)
+                                        thirdInt = randint(0, 12)
+                                parenthesisText = "(" + str(secondInt) + operations[operation2] + str(thirdInt) + ")"
+                                parenthesisNum = eval(parenthesisText)
+                        Question.questionText = str(firstInt) + operations[operation1] + parenthesisText
+                        Question.answer = int(eval(Question.questionText))
+                        Question.questionText += " = ?"
+                        break
+                                    
+                    else:
+                        if operation1 == 4:
+                            if secondInt == 0: 
+                                secondInt = randint(1,12)
+                            while(firstInt % secondInt != 0): 
+                                firstInt = randint(0, 12)
+                                secondInt = randint(1, 12)
+                        parenthesisText = "(" + str(firstInt) + operations[operation1] + str(secondInt) + ")"
+                        parenthesisNum = eval(parenthesisText)
+                        
+                        if operation2 == 4:
+                            if thirdInt == 0: thirdInt = randint(1, 12)
+                            while(parenthesisNum % thirdInt != 0):
+                                firstInt = randint(0, 12)
+                                secondInt = randint(0, 12)
+                                thirdInt = randint(1, 12)
+                                if operation1 == 4:
+                                    if secondInt == 0: 
+                                        secondInt = randint(1,12)
+                                    while(firstInt % secondInt != 0): 
+                                        firstInt = randint(0, 12)
+                                        secondInt = randint(1, 12)
+                                parenthesisText = "(" + str(firstInt) + operations[operation1] + str(secondInt) + ")"
+                                parenthesisNum = eval(parenthesisText)
+                        Question.questionText = parenthesisText + operations[operation2] + str(thirdInt)
+                        Question.answer = int(eval(Question.questionText))
+                        Question.questionText += " = ?"
+                        break
                     
-            elif other == 2:
-                #*
-                if order % 2 == 0:
-                    Question.questionText = str(firstInt)+" + "+str(secondInt)+" * " + str(thirdInt) + " = ?"
-                    Question.answer = firstInt + secondInt * thirdInt
                 else:
-                    Question.questionText = str(firstInt)+" * "+str(secondInt)+" + " + str(thirdInt) + " = ?"
-                    Question.answer = firstInt * secondInt + thirdInt
-                    
-            else:
-                #/
-                while thirdInt == 0:
-                    thirdInt = randint(1, 12)
-                if order == 1:
-                    while(secondInt % thirdInt!=0):
-                        firstInt = randint(0,12)
-                        secondInt = randint(0,12)
-                        thirdInt = randint(1, 12)
-                    Question.questionText = str(firstInt)+" + ("+str(secondInt)+" / " + str(thirdInt) + ") = ?"
-                    fourthInt = secondInt / thirdInt
-                    Question.answer = int(firstInt + fourthInt)
-                if order == 2:
-                    while(firstInt % secondInt!=0):
-                        firstInt = randint(0,12)
-                        secondInt = randint(1,12)
-                        thirdInt = randint(0, 12)
-                    Question.questionText = "(" + str(firstInt)+" / "+str(secondInt)+") + " + str(thirdInt) + " = ?"
-                    fourthInt = firstInt / secondInt
-                    Question.answer = int(fourthInt + thirdInt)
-                if order == 3:
-                    while((firstInt + secondInt) % thirdInt!=0):
-                        firstInt = randint(0,12)
-                        secondInt = randint(0,12)
-                        thirdInt = randint(1, 12)
-                    Question.questionText = "(" + str(firstInt)+" + "+str(secondInt)+") / " + str(thirdInt) + " = ?"
-                    fourthInt = firstInt + secondInt
-                    Question.answer = int(fourthInt / thirdInt)
-                if order == 4:
-                    while(firstInt % (secondInt + thirdInt)!=0):
-                        firstInt = randint(0,12)
-                        secondInt = randint(0,12)
-                        thirdInt = randint(1, 12)
-                    Question.questionText = str(firstInt)+" / ("+str(secondInt)+" + " + str(thirdInt) + ") = ?"
-                    fourthInt = secondInt + thirdInt
-                    Question.answer = int(firstInt / fourthInt)
+                    groupNum = 0
+                    groupText = ""
+                    if operation1 == 3 or operation1 == 4:
+                        if operation1 == 4: 
+                            if secondInt == 0: secondInt = randint(1, 12)
+                            while(firstInt % secondInt != 0):
+                                firstInt = randint(0, 12)
+                                secondInt = randint(1, 12)
+                        groupText = str(firstInt) + operations[operation1] + str(secondInt)
+                        groupNum = eval(groupText)
+                        
+                        if operation2 == 4 :
+                            if thirdInt == 0: thirdInt = randint(1, 12)
+                            while(groupNum % thirdInt != 0):
+                                firstInt = randint(0, 12)
+                                secondInt = randint(0, 12)
+                                thirdInt = randint(1, 12)
+                                if operation1 == 4: 
+                                    if secondInt == 0: secondInt = randint(1, 12)
+                                    while(firstInt % secondInt != 0):
+                                        firstInt = randint(0, 12)
+                                        secondInt = randint(1, 12)
+                                groupText = str(firstInt) + operations[operation1] + str(secondInt)
+                                groupNum = eval(groupText)
+                        Question.questionText = groupText + operations[operation2] + str(thirdInt)
+                        Question.answer = int(eval(Question.questionText))
+                        Question.questionText += " = ?"
+                        break
+                            
+                    elif operation2 == 3 or operation2 == 4:
+                        if operation2 == 4:
+                            if thirdInt == 0: thirdInt = randint(1, 12)
+                            while(secondInt % thirdInt != 0):
+                                secondInt = randint(0, 12)
+                                thirdInt = randint(1, 12)
+                        groupText = str(secondInt) + operations[operation2] + str(thirdInt)
+                        groupNum = eval(groupText)
+                        Question.questionText = str(firstInt) + operations[operation1] + groupText
+                        Question.answer = int(eval(Question.questionText))
+                        Question.questionText += " = ?"
+                        break
+                    else:
+                        Question.questionText = str(firstInt) + operations[operation1] + str(secondInt) + operations[operation2] + str(thirdInt)
+                        Question.answer = int(eval(Question.questionText))
+                        Question.questionText += " = ?"
+                        break
+            except ZeroDivisionError:
+                print("When creating a normal difficulty equation, 0 was divided. Probably want to look into that")
+                pygame.quit()
+                exit()
+                break
             
-        elif(temp==2):
-            #-
-            firstInt = randint(0,12)
-            secondInt = randint(1,12)
-            thirdInt = randint(1, 12)
-            #Question.questionText = str(firstInt)+" + "+str(secondInt)+" = ?"
-            #Question.answer = firstInt+secondInt
-            if other == 1:
-                #+
-                if order % 2 == 0:
-                    Question.questionText = str(firstInt)+" + "+str(secondInt)+" - " + str(thirdInt) + " = ?"
-                    Question.answer = firstInt + secondInt - thirdInt
-                else:
-                    Question.questionText = str(firstInt)+" - "+str(secondInt)+" + " + str(thirdInt) + " = ?"
-                    Question.answer = firstInt - secondInt + thirdInt
-                    
-            elif other == 2:
-                #*
-                if order % 2 == 0:
-                    Question.questionText = str(firstInt)+" - "+str(secondInt)+" * " + str(thirdInt) + " = ?"
-                    Question.answer = firstInt - secondInt * thirdInt
-                else:
-                    Question.questionText = str(firstInt)+" * "+str(secondInt)+" - " + str(thirdInt) + " = ?"
-                    Question.answer = firstInt * secondInt - thirdInt
-                    
-            else:
-                #/
-                while thirdInt == 0:
-                    thirdInt = randint(1, 12)
-                if order == 1:
-                    while(secondInt % thirdInt!=0):
-                        firstInt = randint(0,12)
-                        secondInt = randint(0,12)
-                        thirdInt = randint(1, 12)
-                    Question.questionText = str(firstInt)+" - ("+str(secondInt)+" / " + str(thirdInt) + ") = ?"
-                    fourthInt = secondInt / thirdInt
-                    Question.answer = int(firstInt - fourthInt)
-                if order == 2:
-                    while(firstInt % secondInt!=0):
-                        firstInt = randint(0,12)
-                        secondInt = randint(1,12)
-                        thirdInt = randint(0, 12)
-                    Question.questionText = "(" + str(firstInt)+" / "+str(secondInt)+") - " + str(thirdInt) + " = ?"
-                    fourthInt = firstInt / secondInt
-                    Question.answer = int(fourthInt - thirdInt)
-                if order == 3:
-                    while((firstInt - secondInt) % thirdInt!=0):
-                        firstInt = randint(0,12)
-                        secondInt = randint(0,12)
-                        thirdInt = randint(1, 12)
-                    Question.questionText = "(" + str(firstInt)+" - "+str(secondInt)+") / " + str(thirdInt) + " = ?"
-                    fourthInt = firstInt - secondInt
-                    Question.answer = int(fourthInt / thirdInt)
-                if order == 4:
-                    while(secondInt - thirdInt == 0):
-                        secondInt = randint(0,12)
-                        thirdInt = randint(0, 12)
-                    while(firstInt % (secondInt - thirdInt)!=0):
-                        firstInt = randint(0,12)
-                        secondInt = randint(0,12)
-                        thirdInt = randint(0, 12)
-                        while(secondInt - thirdInt == 0):
-                            secondInt = randint(0,12)
-                            thirdInt = randint(0, 12)
-                    Question.questionText = str(firstInt)+" / ("+str(secondInt)+" - " + str(thirdInt) + ") = ?"
-                    fourthInt = secondInt - thirdInt
-                    Question.answer = int(firstInt / fourthInt)
-            
-        elif(temp==3):
-            #*
-            firstInt = randint(0,12)
-            secondInt = randint(1,12)
-            thirdInt = randint(1, 12)
-            #Question.questionText = str(firstInt)+" + "+str(secondInt)+" = ?"
-            #Question.answer = firstInt+secondInt
-            if other == 1:
-                #-
-                if order % 2 == 0:
-                    Question.questionText = str(firstInt)+" * "+str(secondInt)+" - " + str(thirdInt) + " = ?"
-                    Question.answer = firstInt * secondInt - thirdInt
-                else:
-                    Question.questionText = str(firstInt)+" - "+str(secondInt)+" * " + str(thirdInt) + " = ?"
-                    Question.answer = firstInt - secondInt * thirdInt
-                    
-            elif other == 2:
-                #+
-                if order % 2 == 0:
-                    Question.questionText = str(firstInt)+" + "+str(secondInt)+" * " + str(thirdInt) + " = ?"
-                    Question.answer = firstInt + secondInt * thirdInt
-                else:
-                    Question.questionText = str(firstInt)+" * "+str(secondInt)+" + " + str(thirdInt) + " = ?"
-                    Question.answer = firstInt * secondInt + thirdInt
-                    
-            else:
-                #/
-                while thirdInt == 0:
-                    thirdInt = randint(1, 12)
-                if order == 1:
-                    while(secondInt % thirdInt!=0):
-                        firstInt = randint(0,12)
-                        secondInt = randint(0,12)
-                        thirdInt = randint(1, 12)
-                    Question.questionText = str(firstInt)+" * ("+str(secondInt)+" / " + str(thirdInt) + ") = ?"
-                    fourthInt = secondInt / thirdInt
-                    Question.answer = int(firstInt * fourthInt)
-                if order == 2:
-                    while(firstInt % secondInt!=0):
-                        firstInt = randint(0,12)
-                        secondInt = randint(1,12)
-                        thirdInt = randint(0, 12)
-                    Question.questionText = "(" + str(firstInt)+" / "+str(secondInt)+") * " + str(thirdInt) + " = ?"
-                    fourthInt = firstInt / secondInt
-                    Question.answer = int(fourthInt * thirdInt)
-                if order == 3:
-                    while((firstInt * secondInt) % thirdInt!=0):
-                        firstInt = randint(0,12)
-                        secondInt = randint(0,12)
-                        thirdInt = randint(1, 12)
-                    Question.questionText = "(" + str(firstInt)+" * "+str(secondInt)+") / " + str(thirdInt) + " = ?"
-                    fourthInt = firstInt * secondInt
-                    Question.answer = int(fourthInt / thirdInt)
-                if order == 4:
-                    while thirdInt == 0:
-                        thirdInt = randint(1, 12)
-                    while(firstInt % (secondInt * thirdInt)!=0):
-                        firstInt = randint(0,12)
-                        secondInt = randint(1,12)
-                        thirdInt = randint(1, 12)
-                    Question.questionText = str(firstInt)+" / ("+str(secondInt)+" * " + str(thirdInt) + ") = ?"
-                    fourthInt = secondInt * thirdInt
-                    Question.answer = int(firstInt / fourthInt)
-            
-        else:
-            #/
-            firstInt = randint(0,12)
-            secondInt = randint(0,12)
-            thirdInt = randint(0, 12)
-            fourthInt = 0
-            #Question.questionText = str(firstInt)+" + "+str(secondInt)+" = ?"
-            #Question.answer = firstInt+secondInt
-            if other == 1:
-                #-
-                if order == 1:
-                    while thirdInt == 0:
-                        thirdInt = randint(1, 12)
-                    while(secondInt % thirdInt!=0):
-                        firstInt = randint(0,12)
-                        secondInt = randint(0,12)
-                        thirdInt = randint(1, 12)
-                    Question.questionText = str(firstInt)+" - ("+str(secondInt)+" / " + str(thirdInt) + ") = ?"
-                    fourthInt = secondInt / thirdInt
-                    Question.answer = int(firstInt - fourthInt)
-                if order == 2:
-                    while secondInt == 0:
-                        secondInt = randint(1, 12)
-                    while(firstInt % secondInt!=0):
-                        firstInt = randint(0,12)
-                        secondInt = randint(1,12)
-                        thirdInt = randint(0, 12)
-                    Question.questionText = "(" + str(firstInt)+" / "+str(secondInt)+") - " + str(thirdInt) + " = ?"
-                    fourthInt = firstInt / secondInt
-                    Question.answer = int(fourthInt - thirdInt)
-                if order == 3:
-                    while thirdInt == 0:
-                        thirdInt = randint(1, 12)
-                    while((firstInt - secondInt) % thirdInt!=0):
-                        firstInt = randint(0,12)
-                        secondInt = randint(0,12)
-                        thirdInt = randint(1, 12)
-                    Question.questionText = "(" + str(firstInt)+" - "+str(secondInt)+") / " + str(thirdInt) + " = ?"
-                    fourthInt = firstInt - secondInt
-                    Question.answer = int(fourthInt / thirdInt)
-                if order == 4:
-                    while(secondInt - thirdInt != 0): #To make sure the number in the parenthesis isn't equal to 0
-                        thirdInt = randint(0, 12)
-                    while(firstInt % (secondInt - thirdInt)!=0):
-                        firstInt = randint(0,12)
-                        secondInt = randint(0,12)
-                        thirdInt = randint(0, 12)
-                        while(secondInt - thirdInt != 0):
-                            thirdInt = randint(0, 12)
-                    Question.questionText = str(firstInt)+" / ("+str(secondInt)+" - " + str(thirdInt) + ") = ?"
-                    fourthInt = secondInt - thirdInt
-                    Question.answer = int(firstInt / fourthInt)
-                    
-            elif other == 2:
-                #*
-                while thirdInt == 0:
-                    thirdInt = randint(1, 12)
-                if order == 1:
-                    while(secondInt % thirdInt!=0):
-                        firstInt = randint(0,12)
-                        secondInt = randint(0,12)
-                        thirdInt = randint(1, 12)
-                    Question.questionText = str(firstInt)+" * ("+str(secondInt)+" / " + str(thirdInt) + ") = ?"
-                    fourthInt = secondInt / thirdInt
-                    Question.answer = int(firstInt * fourthInt)
-                if order == 2:
-                    while secondInt == 0:
-                        secondInt = randint(1, 12)
-                    while(firstInt % secondInt!=0):
-                        firstInt = randint(0,12)
-                        secondInt = randint(1,12)
-                        thirdInt = randint(0, 12)
-                    Question.questionText = "(" + str(firstInt)+" / "+str(secondInt)+") * " + str(thirdInt) + " = ?"
-                    fourthInt = firstInt / secondInt
-                    Question.answer = int(fourthInt * thirdInt)
-                if order == 3:
-                    while((firstInt * secondInt) % thirdInt!=0):
-                        firstInt = randint(0,12)
-                        secondInt = randint(0,12)
-                        thirdInt = randint(1, 12)
-                    Question.questionText = "(" + str(firstInt)+" * "+str(secondInt)+") / " + str(thirdInt) + " = ?"
-                    fourthInt = firstInt * secondInt
-                    Question.answer = int(fourthInt / thirdInt)
-                if order == 4:
-                    while thirdInt == 0 or secondInt == 0:
-                        secondInt = randint(1, 12)
-                        thirdInt = randint(1, 12)
-                    while(firstInt % (secondInt * thirdInt)!=0):
-                        firstInt = randint(0,12)
-                        secondInt = randint(1,12)
-                        thirdInt = randint(1, 12)
-                    Question.questionText = str(firstInt)+" / ("+str(secondInt)+" * " + str(thirdInt) + ") = ?"
-                    fourthInt = secondInt * thirdInt
-                    Question.answer = int(firstInt / fourthInt)
-                    
-            else:
-                #+
-                while thirdInt == 0:
-                    thirdInt = randint(1, 12)
-                if order == 1:
-                    while(secondInt % thirdInt!=0):
-                        firstInt = randint(0,12)
-                        secondInt = randint(0,12)
-                        thirdInt = randint(1, 12)
-                    Question.questionText = str(firstInt)+" + ("+str(secondInt)+" / " + str(thirdInt) + ") = ?"
-                    fourthInt = secondInt / thirdInt
-                    Question.answer = int(firstInt + fourthInt)
-                if order == 2:
-                    while secondInt == 0:
-                        secondInt = randint(1, 12)
-                    while(firstInt % secondInt!=0):
-                        firstInt = randint(0,12)
-                        secondInt = randint(1,12)
-                        thirdInt = randint(0, 12)
-                    Question.questionText = "(" + str(firstInt)+" / "+str(secondInt)+") + " + str(thirdInt) + " = ?"
-                    fourthInt = firstInt / secondInt
-                    Question.answer = int(fourthInt + thirdInt)
-                if order == 3:
-                    while((firstInt + secondInt) % thirdInt!=0):
-                        firstInt = randint(0,12)
-                        secondInt = randint(0,12)
-                        thirdInt = randint(1, 12)
-                    Question.questionText = "(" + str(firstInt)+" + "+str(secondInt)+") / " + str(thirdInt) + " = ?"
-                    fourthInt = firstInt + secondInt
-                    Question.answer = int(fourthInt / thirdInt)
-                if order == 4:
-                    while(firstInt % (secondInt + thirdInt)!=0):
-                        firstInt = randint(0,12)
-                        secondInt = randint(0,12)
-                        thirdInt = randint(1, 12)
-                    Question.questionText = str(firstInt)+" / ("+str(secondInt)+" + " + str(thirdInt) + ") = ?"
-                    fourthInt = secondInt + thirdInt
-                    Question.answer = int(firstInt / fourthInt)
-
 def main():
     pygame.init()
     pygame.display.set_caption('Arithimon') #window name
@@ -507,6 +318,7 @@ def main():
     butthead = 0 #for character sprite randomization
     correct = False #tells if answer is correct
     carl = 0 #to slow down the game a bit
+                # pygame.QUIT
     weezer = 0 #to help with damage calc
     win = False #tells if the player has won
     done = False #tells if the match is over
@@ -616,6 +428,7 @@ def main():
     mixer.music.play(-1)
     while True:
         battleTimer = int(pygame.time.get_ticks() / 100) #Every tenth of a second is tracked
+        # print("FPS: "+str(pygame.time.Clock.get_fps(clock))) #To test FPS if needed
         for event in pygame.event.get():
             if event.type == pygame.QUIT: #this will close the game
                 pygame.quit()
@@ -642,7 +455,7 @@ def main():
                     pygame.sprite.Group.empty(enemySprite)
                     beavis = 0
                     butthead = 0
-                    break #So that clicking this does not immediately select hard mode
+                    break #So that clicking this does not immediately select a difficulty
                 
                 if answerMessageRect.collidepoint(event.pos) and playerTurn:
                     if userText != "Input Here" and userText != "":
@@ -962,8 +775,9 @@ def main():
             if event.type == startUpTimer:
                 if jeremy == 0:
                     jeremy = 1
-                else:
+                elif jeremy == 1:
                     title.add(menu())
+                    jeremy = 2
        
        
         pygame.display.update() #updates game

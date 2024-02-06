@@ -1,4 +1,6 @@
 import pygame
+import math
+import sys
 from sys import exit
 from random import randint
 from pygame import mixer
@@ -51,6 +53,7 @@ class playerAppleKun(pygame.sprite.Sprite):
         super().__init__()
        
         playerAppleKun = pygame.image.load("Items/Apple-kun.png").convert_alpha()
+        #playerAppleKun = pygame.image.load("Items/New Piskel (1).gif").convert_alpha()
         playerAppleKun = pygame.transform.scale_by(playerAppleKun, (2, 2))
         playerAppleKun = pygame.transform.flip(playerAppleKun, True, False)
        
@@ -293,6 +296,50 @@ class Question:
                 pygame.quit()
                 exit()
                 break
+        def createHard():
+            temp = randint(1,4)
+            # temp = 2
+            if(temp==1):
+                #+
+                firstInt = randint(0,12)
+                secondInt = randint(0,12)
+                Question.questionText = str(firstInt)+" + "+str(secondInt)+" = ?"
+                Question.answer = firstInt+secondInt
+
+def healthBar(screen, health, damage, damageRect, healthRect, clock):
+    player_health = health / 2
+    newHealth = (health - damage)/2
+    if newHealth < 0:
+        newHealth = 0
+    WIDTH, HEIGHT = 1350, 800
+    FPS = 30
+    clock = pygame.time.Clock()
+
+    # Health bar properties
+    health_bar_width = 200
+    health_bar_height = 25
+    health_bar_x = damageRect.left
+    health_bar_y = damageRect.top
+
+    # Health bar speed (decrease per second)
+    health_bar_speed = 50
+
+    # Main game loop
+    while player_health >= newHealth:
+
+        # Update health
+        player_health -= health_bar_speed / FPS
+
+        # Draw health bar
+        pygame.draw.rect(screen, "red", (health_bar_x, health_bar_y, health_bar_width, health_bar_height))
+        pygame.draw.rect(screen, "green", (health_bar_x, health_bar_y, player_health * (health_bar_width / 100), health_bar_height))
+
+        # Update display
+        pygame.display.update()
+
+        clock.tick(FPS)
+
+
             
 def main():
     pygame.init()
@@ -318,10 +365,10 @@ def main():
     butthead = 0 #for character sprite randomization
     correct = False #tells if answer is correct
     carl = 0 #to slow down the game a bit
-                # pygame.QUIT
     weezer = 0 #to help with damage calc
     win = False #tells if the player has won
     done = False #tells if the match is over
+    oNeal = 0 #damage reduction
     gameActive = False
     diffSelect = False
     diffEasy = False
@@ -647,16 +694,17 @@ def main():
                     if answered:
                         if userText == str(Question.answer):
                             
-                            if alvin < 0:
+                            if alvin < 0: #If player damage below 0, then it is set to 0
                                 alvin = 0
                             
-                            michael = michael - alvin
-                            
-                            if michael < 0:
+                            healthBar(screen, michael, alvin, otherDamageRect, otherHealthRect, clock)
+                            michael -= alvin
+                            if michael < 0: #If enemy health is below 0, then it is set to 0
                                 michael = 0
                                 
                             if michael == 0: #Enemy health at 0, player win
                                 otherHealthRect.update(1000, 175, michael, 25)
+                                screen.blit(secretMessage, secretMessageRect)
                                 win = True
                                 done = True
                                 correct = True
@@ -673,7 +721,6 @@ def main():
                                 
                             else: #Enemy health not yet 0, go to computer turn
                                 otherHealthRect.update(1000, 175, michael, 25)
-                                screen.blit(secretMessage, secretMessageRect)
                                 correct = True
                                 answered = False
                                 textActive = False
@@ -732,7 +779,9 @@ def main():
                                 questionMessage = theFont.render(Question.questionText, False, "white")
                                 
                         else:
-                            simon = simon - randint(10, 150)
+                            oNeal = randint(10, 150)
+                            healthBar(screen, simon, oNeal, playerDamageRect, playerHealthRect, clock)
+                            simon -= oNeal
                             
                             if simon < 0:
                                 simon = 0
@@ -746,7 +795,6 @@ def main():
                             
                             else: #Player health not yet 0, go to player turn
                                 playerHealthRect.update(100, 500, simon, 25)
-                                
                                 playerTurn = True
                                 userText = "Input Here"
                                 weezer = battleTimer
@@ -768,7 +816,7 @@ def main():
                 done = True
                 screen.blit(tempMessageExtreme, tempMessageRectExtreme)
                 screen.blit(messageBack, messageRectBack)
-       
+        
         else:
             title.draw(screen)
             #playerSprite.draw(screen)

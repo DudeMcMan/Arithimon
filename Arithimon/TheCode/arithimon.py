@@ -3,6 +3,7 @@ import math
 import sys
 from sys import exit
 from random import randint
+from random import random
 from pygame import mixer
 
 # for running python3 TheCode/arithimon.py
@@ -307,8 +308,9 @@ class Question:
                 Question.answer = firstInt+secondInt
 
 def healthBar(screen, health, damage, damageRect, healthRect, clock):
+    #healthBar(screen, michael, alvin, otherDamageRect, otherHealthRect, clock)
     player_health = health / 2
-    newHealth = (health - damage)/2
+    newHealth = (float(health) - float(damage))/2.0
     if newHealth < 0:
         newHealth = 0
     WIDTH, HEIGHT = 1350, 800
@@ -330,6 +332,9 @@ def healthBar(screen, health, damage, damageRect, healthRect, clock):
         # Update health
         player_health -= health_bar_speed / FPS
 
+        # Snaps to grid, makes whole number
+        player_health = round(player_health)
+        
         # Draw health bar
         pygame.draw.rect(screen, "red", (health_bar_x, health_bar_y, health_bar_width, health_bar_height))
         pygame.draw.rect(screen, "green", (health_bar_x, health_bar_y, player_health * (health_bar_width / 100), health_bar_height))
@@ -687,10 +692,11 @@ def main():
         
                     # set width of textfield so that text cannot get outside of user's text input
                     inputRect.w = max(100, text_surface.get_width()+10)
+
+                    if battleTimer - weezer <= 600:
+                        #y = -28log(x + 1) + 120
+                        alvin = -28 * math.log10(battleTimer - weezer + 1) + 120
                     
-                    if battleTimer - weezer <= 150: #Damage minimum of 50. Maximum time is 15 seconds
-                        alvin = theodre - (battleTimer - weezer)
-                
                     if answered:
                         if userText == str(Question.answer):
                             
@@ -779,7 +785,7 @@ def main():
                                 questionMessage = theFont.render(Question.questionText, False, "white")
                                 
                         else:
-                            oNeal = randint(10, 150)
+                            oNeal = -28 * math.log10((math.floor(20+(600-20)*random()**2)) + 1) + 120
                             healthBar(screen, simon, oNeal, playerDamageRect, playerHealthRect, clock)
                             simon -= oNeal
                             

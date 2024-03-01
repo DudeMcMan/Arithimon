@@ -177,7 +177,6 @@ class Button:
                     pygame.event.post(pygame.event.Event(self.event))
         else:
             if self.pressed and not pygame.mouse.get_pressed()[0]:
-                print("test")
                 pygame.event.post(pygame.event.Event(self.event))
             self.pressed = False
             self.dynamic_elevation = self.elevation
@@ -568,13 +567,13 @@ def main():
     
     #tempMessageNormal = theFont.render("Normal Mode Selected", False, "white") #temporary message
     #tempMessageRectNormal = tempMessageNormal.get_rect(center=(675, 150))
-   
+    
     # tempMessageHard = theFont.render("Hard Mode Selected", False, "white") #temporary message
     # tempMessageRectHard = tempMessageHard.get_rect(center=(675, 150))
-   
+    
     # tempMessageExtreme = theFont.render("Extreme Mode Selected", False, "white") #temporary message
     # tempMessageRectExtreme = tempMessageExtreme.get_rect(center=(675, 150))
-   
+    
     #timers
     startUpTimer = pygame.USEREVENT + 1
     pygame.time.set_timer(startUpTimer, 2000)
@@ -627,9 +626,11 @@ def main():
                 beavis = 0
                 butthead = 0
                 diffSelectButtonsActive = True
+            
             elif event.type == answerButtonClick and playerTurn:
                 if userText != "Input\u00A0Here" and userText != "":
                     answered = True
+            
             elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
                
                 if inputRect.collidepoint(event.pos) and playerTurn:
@@ -660,16 +661,10 @@ def main():
                     else:
                         if userText == "Input\u00A0Here": userText = ""
                         userText += event.unicode
-                        print(event.mod)
-                        if event.mod in (4097, 4098, 4160, 4224, 4352, 4608):
-                            print("True! "+str(event.key))
             elif userText == "": userText = "Input\u00A0Here"
            
             if gameActive:
                 if diffSelect:
-                    # button1.draw()
-                    # if(button1.clicked):
-                    #     print("YE") #FIX THIS
                     userText = "Input\u00A0Here"
                     
                     michael = 200

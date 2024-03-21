@@ -187,6 +187,8 @@ class Button:
 class Question:
     questionText = ""
     answer = 0
+    breakDown = ""
+    gabe = ""
     def createEasy():
         Question.questionText = ""
         temp = randint(1,4)
@@ -284,6 +286,7 @@ class Question:
                                 parenthesisNum = eval(parenthesisText)
                         Question.questionText = str(firstInt) + operations[operation1] + parenthesisText
                         Question.answer = int(eval(Question.questionText))
+                        Question.breakDown = str(firstInt) + operations[operation1] + str(int(parenthesisNum))
                         Question.questionText += " = ?"
                         break
                                     
@@ -313,6 +316,7 @@ class Question:
                                 parenthesisNum = eval(parenthesisText)
                         Question.questionText = parenthesisText + operations[operation2] + str(thirdInt)
                         Question.answer = int(eval(Question.questionText))
+                        Question.breakDown = str(int(parenthesisNum)) + operations[operation2] + str(thirdInt)
                         Question.questionText += " = ?"
                         break
                     
@@ -343,6 +347,7 @@ class Question:
                                 groupNum = eval(groupText)
                         Question.questionText = groupText + operations[operation2] + str(thirdInt)
                         Question.answer = int(eval(Question.questionText))
+                        Question.breakDown = str(int(groupNum)) + operations[operation2] + str(thirdInt)
                         Question.questionText += " = ?"
                         break
                             
@@ -356,11 +361,13 @@ class Question:
                         groupNum = eval(groupText)
                         Question.questionText = str(firstInt) + operations[operation1] + groupText
                         Question.answer = int(eval(Question.questionText))
+                        Question.breakDown = str(firstInt) + operations[operation1] + str(int(groupNum))
                         Question.questionText += " = ?"
                         break
                     else:
                         Question.questionText = str(firstInt) + operations[operation1] + str(secondInt) + operations[operation2] + str(thirdInt)
                         Question.answer = int(eval(Question.questionText))
+                        Question.breakDown = str(eval(str(firstInt) + operations[operation1 + str(secondInt)])) + operations[operation2] + str(thirdInt)
                         Question.questionText += " = ?"
                         break
             except ZeroDivisionError:
@@ -372,7 +379,7 @@ class Question:
     def createHard():
         Question.questionText = ""
         temp = randint(1,2)
-        # temp = 2
+        #temp = 2
         if(temp==1):
             #+
             firstInt = randint(1,12)
@@ -384,6 +391,8 @@ class Question:
                 thirdInt = randint(1, 12)
             Question.questionText = str(firstInt)+"x + "+str(secondInt)+" = " + str(thirdInt)
             Question.answer = int((thirdInt - secondInt) / firstInt)
+            Question.breakDown = "x = (" + str(thirdInt) + " - " + str(secondInt) + ") / " + str(firstInt)
+            Question.gabe = "x = " + str(thirdInt - secondInt) + " / " + str(firstInt)
 
         else:
             #-
@@ -396,6 +405,8 @@ class Question:
                 thirdInt = randint(1, 12)
             Question.questionText = str(firstInt)+"x - "+str(secondInt)+" = " + str(thirdInt)
             Question.answer = int((thirdInt + secondInt) / firstInt)
+            Question.breakDown = "x = (" + str(thirdInt) + " + " + str(secondInt) + ") / " + str(firstInt)
+            Question.gabe = "x = " + str(thirdInt + secondInt) + " / " + str(firstInt)
 
     def createExtreme():
         Question.questionText = ""
@@ -578,6 +589,12 @@ def main():
     
     messageAnswer = theFont.render("Correct Answer is: ", False, "white")
     messageRectAnswer = messageAnswer.get_rect(center=(675, 300))
+    
+    messageBreakDown = theFont.render("", False, "white")
+    messageRectBreakDown = messageBreakDown.get_rect(center=(675, 200))
+    
+    messageGabe = theFont.render("", False, "white")
+    messageRectGabe = messageGabe.get_rect(center=(675, 250))
    
     #timers
     startUpTimer = pygame.USEREVENT + 1
@@ -881,9 +898,19 @@ def main():
 
                         else: #Wrong, go to computer turn
                             messageAnswer = theFont.render("Correct Answer is: " + str(Question.answer), False, "white")
+                            messageRectAnswer = messageAnswer.get_rect(center=(675, 300))
+                            
+                            messageBreakDown = theFont.render(Question.breakDown, False, "white")
+                            messageRectBreakDown = messageBreakDown.get_rect(center=(675, 200))
+                            
+                            messageGabe = theFont.render(Question.gabe, False, "white")
+                            messageRectGabe = messageGabe.get_rect(center=(675, 250))
+                            
                             background.draw(screen)
                             screen.blit(questionMessage, questionMessageRect)
                             screen.blit(messageAnswer, messageRectAnswer)
+                            screen.blit(messageBreakDown, messageRectBreakDown)
+                            screen.blit(messageGabe, messageRectGabe)
                             screen.blit(wrongMessage, wrongMessageRect)
                             playerSprite.draw(screen)
                             enemySprite.draw(screen)
